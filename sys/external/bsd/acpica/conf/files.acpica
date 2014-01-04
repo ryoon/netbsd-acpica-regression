@@ -158,7 +158,6 @@ file	external/bsd/acpica/dist/resources/rsxface.c		acpica
 file	external/bsd/acpica/dist/tables/tbfadt.c		acpica
 file	external/bsd/acpica/dist/tables/tbfind.c		acpica
 file	external/bsd/acpica/dist/tables/tbinstal.c		acpica
-file	external/bsd/acpica/dist/tables/tbprint.c		acpica
 file	external/bsd/acpica/dist/tables/tbutils.c		acpica
 file	external/bsd/acpica/dist/tables/tbxface.c		acpica
 file	external/bsd/acpica/dist/tables/tbxfload.c		acpica
@@ -167,13 +166,11 @@ file	external/bsd/acpica/dist/tables/tbxfroot.c		acpica
 # utilities/
 file	external/bsd/acpica/dist/utilities/utaddress.c		acpica
 file	external/bsd/acpica/dist/utilities/utalloc.c		acpica
-file	external/bsd/acpica/dist/utilities/utbuffer.c		acpica
 file	external/bsd/acpica/dist/utilities/utcache.c		acpica
 file	external/bsd/acpica/dist/utilities/utcopy.c		acpica
 file	external/bsd/acpica/dist/utilities/utdebug.c		acpica
 file	external/bsd/acpica/dist/utilities/utdecode.c		acpica
 file	external/bsd/acpica/dist/utilities/utdelete.c		acpica
-file	external/bsd/acpica/dist/utilities/uterror.c		acpica
 file	external/bsd/acpica/dist/utilities/uteval.c		acpica
 file	external/bsd/acpica/dist/utilities/utexcep.c		acpica
 file	external/bsd/acpica/dist/utilities/utglobal.c		acpica
