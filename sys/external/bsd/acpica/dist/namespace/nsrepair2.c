@@ -268,7 +268,7 @@ AcpiNsRepair_ALR (
 
 
     Status = AcpiNsCheckSortedList (Info, ReturnObject, 2, 1,
-                ACPI_SORT_ASCENDING, "AmbientIlluminance");
+                ACPI_SORT_ASCENDING, __UNCONST("AmbientIlluminance"));
 
     return (Status);
 }
@@ -446,100 +446,6 @@ AcpiNsRepair_CID (
 
 /******************************************************************************
  *
-<<<<<<< HEAD
- * FUNCTION:    AcpiNsRepair_CST
- *
- * PARAMETERS:  Info                - Method execution information block
- *              ReturnObjectPtr     - Pointer to the object returned from the
- *                                    evaluation of a method or object
- *
- * RETURN:      Status. AE_OK if object is OK or was repaired successfully
- *
- * DESCRIPTION: Repair for the _CST object:
- *              1. Sort the list ascending by C state type
- *              2. Ensure type cannot be zero
- *              3. A sub-package count of zero means _CST is meaningless
- *              4. Count must match the number of C state sub-packages
- *
- *****************************************************************************/
-
-static ACPI_STATUS
-AcpiNsRepair_CST (
-    ACPI_EVALUATE_INFO      *Info,
-    ACPI_OPERAND_OBJECT     **ReturnObjectPtr)
-{
-    ACPI_OPERAND_OBJECT     *ReturnObject = *ReturnObjectPtr;
-    ACPI_OPERAND_OBJECT     **OuterElements;
-    UINT32                  OuterElementCount;
-    ACPI_OPERAND_OBJECT     *ObjDesc;
-    ACPI_STATUS             Status;
-    BOOLEAN                 Removing;
-    UINT32                  i;
-
-
-    ACPI_FUNCTION_NAME (NsRepair_CST);
-
-
-    /*
-     * Entries (subpackages) in the _CST Package must be sorted by the
-     * C-state type, in ascending order.
-     */
-    Status = AcpiNsCheckSortedList (Info, ReturnObject, 1, 4, 1,
-                ACPI_SORT_ASCENDING, __UNCONST("C-State Type"));
-    if (ACPI_FAILURE (Status))
-    {
-        return (Status);
-    }
-
-    /*
-     * We now know the list is correctly sorted by C-state type. Check if
-     * the C-state type values are proportional.
-     */
-    OuterElementCount = ReturnObject->Package.Count - 1;
-    i = 0;
-    while (i < OuterElementCount)
-    {
-        OuterElements = &ReturnObject->Package.Elements[i + 1];
-        Removing = FALSE;
-
-        if ((*OuterElements)->Package.Count == 0)
-        {
-            ACPI_WARN_PREDEFINED ((AE_INFO, Info->FullPathname, Info->NodeFlags,
-                "SubPackage[%u] - removing entry due to zero count", i));
-            Removing = TRUE;
-        }
-
-        ObjDesc = (*OuterElements)->Package.Elements[1]; /* Index1 = Type */
-        if ((UINT32) ObjDesc->Integer.Value == 0)
-        {
-            ACPI_WARN_PREDEFINED ((AE_INFO, Info->FullPathname, Info->NodeFlags,
-                "SubPackage[%u] - removing entry due to invalid Type(0)", i));
-            Removing = TRUE;
-        }
-
-        if (Removing)
-        {
-            AcpiNsRemoveElement (ReturnObject, i + 1);
-            OuterElementCount--;
-        }
-        else
-        {
-            i++;
-        }
-    }
-
-    /* Update top-level package count, Type "Integer" checked elsewhere */
-
-    ObjDesc = ReturnObject->Package.Elements[0];
-    ObjDesc->Integer.Value = OuterElementCount;
-    return (AE_OK);
-}
-
-
-/******************************************************************************
- *
-=======
->>>>>>> acpica
  * FUNCTION:    AcpiNsRepair_HID
  *
  * PARAMETERS:  Info                - Method execution information block
@@ -669,7 +575,7 @@ AcpiNsRepair_TSS (
     }
 
     Status = AcpiNsCheckSortedList (Info, ReturnObject, 5, 1,
-                ACPI_SORT_DESCENDING, "PowerDissipation");
+                ACPI_SORT_DESCENDING, __UNCONST("PowerDissipation"));
 
     return (Status);
 }
@@ -713,13 +619,8 @@ AcpiNsRepair_PSS (
      * incorrectly sorted, sort it. We sort by CpuFrequency, since this
      * should be proportional to the power.
      */
-<<<<<<< HEAD
-    Status =AcpiNsCheckSortedList (Info, ReturnObject, 0, 6, 0,
-                ACPI_SORT_DESCENDING, __UNCONST("CpuFrequency"));
-=======
     Status =AcpiNsCheckSortedList (Info, ReturnObject, 6, 0,
-                ACPI_SORT_DESCENDING, "CpuFrequency");
->>>>>>> acpica
+                ACPI_SORT_DESCENDING, __UNCONST("CpuFrequency"));
     if (ACPI_FAILURE (Status))
     {
         return (Status);
@@ -755,56 +656,6 @@ AcpiNsRepair_PSS (
 
 /******************************************************************************
  *
-<<<<<<< HEAD
- * FUNCTION:    AcpiNsRepair_TSS
- *
- * PARAMETERS:  Info                - Method execution information block
- *              ReturnObjectPtr     - Pointer to the object returned from the
- *                                    evaluation of a method or object
- *
- * RETURN:      Status. AE_OK if object is OK or was repaired successfully
- *
- * DESCRIPTION: Repair for the _TSS object. If necessary, sort the object list
- *              descending by the power dissipation values.
- *
- *****************************************************************************/
-
-static ACPI_STATUS
-AcpiNsRepair_TSS (
-    ACPI_EVALUATE_INFO      *Info,
-    ACPI_OPERAND_OBJECT     **ReturnObjectPtr)
-{
-    ACPI_OPERAND_OBJECT     *ReturnObject = *ReturnObjectPtr;
-    ACPI_STATUS             Status;
-    ACPI_NAMESPACE_NODE     *Node;
-
-
-    /*
-     * We can only sort the _TSS return package if there is no _PSS in the
-     * same scope. This is because if _PSS is present, the ACPI specification
-     * dictates that the _TSS Power Dissipation field is to be ignored, and
-     * therefore some BIOSs leave garbage values in the _TSS Power field(s).
-     * In this case, it is best to just return the _TSS package as-is.
-     * (May, 2011)
-     */
-    Status = AcpiNsGetNode (Info->Node, "^_PSS",
-        ACPI_NS_NO_UPSEARCH, &Node);
-    if (ACPI_SUCCESS (Status))
-    {
-        return (AE_OK);
-    }
-
-    Status = AcpiNsCheckSortedList (Info, ReturnObject, 0, 5, 1,
-                ACPI_SORT_DESCENDING, __UNCONST("PowerDissipation"));
-
-    return (Status);
-}
-
-
-/******************************************************************************
- *
-=======
->>>>>>> acpica
  * FUNCTION:    AcpiNsCheckSortedList
  *
  * PARAMETERS:  Info                - Method execution information block
