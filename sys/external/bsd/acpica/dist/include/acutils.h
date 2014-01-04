@@ -183,7 +183,7 @@ AcpiUtInitGlobals (
 
 #if defined(ACPI_DEBUG_OUTPUT) || defined(ACPI_DEBUGGER)
 
-char *
+const char *
 AcpiUtGetMutexName (
     UINT32                  MutexId);
 
@@ -197,11 +197,11 @@ char *
 AcpiUtGetTypeName (
     ACPI_OBJECT_TYPE        Type);
 
-char *
+const char *
 AcpiUtGetNodeName (
     void                    *Object);
 
-char *
+const char *
 AcpiUtGetDescriptorName (
     void                    *Object);
 
@@ -209,15 +209,15 @@ const char *
 AcpiUtGetReferenceName (
     ACPI_OPERAND_OBJECT     *Object);
 
-char *
+const char *
 AcpiUtGetObjectTypeName (
     ACPI_OPERAND_OBJECT     *ObjDesc);
 
-char *
+const char *
 AcpiUtGetRegionName (
     UINT8                   SpaceId);
 
-char *
+const char *
 AcpiUtGetEventName (
     UINT32                  EventId);
 
@@ -435,7 +435,7 @@ AcpiUtTraceStr (
     const char              *FunctionName,
     const char              *ModuleName,
     UINT32                  ComponentId,
-    char                    *String);
+    const char              *String);
 
 void
 AcpiUtExit (
@@ -527,13 +527,13 @@ AcpiUtDeleteInternalObjectList (
 ACPI_STATUS
 AcpiUtEvaluateObject (
     ACPI_NAMESPACE_NODE     *PrefixNode,
-    char                    *Path,
+    const char              *Path,
     UINT32                  ExpectedReturnBtypes,
     ACPI_OPERAND_OBJECT     **ReturnDesc);
 
 ACPI_STATUS
 AcpiUtEvaluateNumericObject (
-    char                    *ObjectName,
+    const char              *ObjectName,
     ACPI_NAMESPACE_NODE     *DeviceNode,
     UINT64                  *Value);
 
@@ -827,7 +827,7 @@ void
 AcpiUtDisplayInitPathname (
     UINT8                   Type,
     ACPI_NAMESPACE_NODE     *ObjHandle,
-    char                    *Path);
+    const char              *Path);
 #endif
 
 
@@ -1021,7 +1021,7 @@ AcpiUtDumpAllocations (
 
 ACPI_STATUS
 AcpiUtCreateList (
-    char                    *ListName,
+    const char              *ListName,
     UINT16                  ObjectSize,
     ACPI_MEMORY_LIST        **ReturnCache);
 

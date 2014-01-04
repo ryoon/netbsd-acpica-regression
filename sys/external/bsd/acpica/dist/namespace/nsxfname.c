@@ -85,12 +85,13 @@ AcpiNsCopyDeviceId (
 ACPI_STATUS
 AcpiGetHandle (
     ACPI_HANDLE             Parent,
-    ACPI_STRING             Pathname,
+    ACPI_CONST_STRING       Pathname,
     ACPI_HANDLE             *RetHandle)
 {
     ACPI_STATUS             Status;
     ACPI_NAMESPACE_NODE     *Node = NULL;
     ACPI_NAMESPACE_NODE     *PrefixNode = NULL;
+    ACPI_STRING             UPathname = __UNCONST(Pathname);
 
 
     ACPI_FUNCTION_ENTRY ();
@@ -127,7 +128,7 @@ AcpiGetHandle (
 
         /* Special case for root-only, since we can't search for it */
 
-        if (!ACPI_STRCMP (Pathname, ACPI_NS_ROOT_PATH))
+        if (!ACPI_STRCMP (UPathname, ACPI_NS_ROOT_PATH))
         {
             *RetHandle = ACPI_CAST_PTR (ACPI_HANDLE, AcpiGbl_RootNode);
             return (AE_OK);
@@ -142,7 +143,7 @@ AcpiGetHandle (
 
     /* Find the Node and convert to a handle */
 
-    Status = AcpiNsGetNode (PrefixNode, Pathname, ACPI_NS_NO_UPSEARCH, &Node);
+    Status = AcpiNsGetNode (PrefixNode, UPathname, ACPI_NS_NO_UPSEARCH, &Node);
     if (ACPI_SUCCESS (Status))
     {
         *RetHandle = ACPI_CAST_PTR (ACPI_HANDLE, Node);
@@ -229,7 +230,7 @@ AcpiGetName (
 
     /* Just copy the ACPI name from the Node and zero terminate it */
 
-    NodeName = AcpiUtGetNodeName (Node);
+    NodeName = __UNCONST(AcpiUtGetNodeName (Node));
     ACPI_MOVE_NAME (Buffer->Pointer, NodeName);
     ((char *) Buffer->Pointer) [ACPI_NAME_SIZE] = 0;
     Status = AE_OK;

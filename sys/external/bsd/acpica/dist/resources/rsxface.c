@@ -612,7 +612,6 @@ AcpiWalkResourceBuffer (
     ACPI_RESOURCE               *Resource;
     ACPI_RESOURCE               *ResourceEnd;
 
-
     ACPI_FUNCTION_TRACE (AcpiWalkResourceBuffer);
 
 
@@ -702,7 +701,7 @@ ACPI_EXPORT_SYMBOL (AcpiWalkResourceBuffer)
 ACPI_STATUS
 AcpiWalkResources (
     ACPI_HANDLE                 DeviceHandle,
-    char                        *Name,
+    const char                  *Name,
     ACPI_WALK_RESOURCE_CALLBACK UserFunction,
     void                        *Context)
 {
@@ -726,7 +725,7 @@ AcpiWalkResources (
     /* Get the _CRS/_PRS/_AEI resource list */
 
     Buffer.Length = ACPI_ALLOCATE_LOCAL_BUFFER;
-    Status = AcpiRsGetMethodData (DeviceHandle, Name, &Buffer);
+    Status = AcpiRsGetMethodData (DeviceHandle, __UNCONST(Name), &Buffer);
     if (ACPI_FAILURE (Status))
     {
         return_ACPI_STATUS (Status);

@@ -102,7 +102,7 @@ AcpiUtRemoveAllocation (
 
 ACPI_STATUS
 AcpiUtCreateList (
-    char                    *ListName,
+    const char              *ListName,
     UINT16                  ObjectSize,
     ACPI_MEMORY_LIST        **ReturnCache)
 {
@@ -117,7 +117,7 @@ AcpiUtCreateList (
 
     ACPI_MEMSET (Cache, 0, sizeof (ACPI_MEMORY_LIST));
 
-    Cache->ListName   = ListName;
+    Cache->ListName   = __UNCONST(ListName);
     Cache->ObjectSize = ObjectSize;
 
     *ReturnCache = Cache;

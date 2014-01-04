@@ -288,7 +288,7 @@ AcpiExLoadTableOp (
     Status = AcpiGetTableByIndex (TableIndex, &Table);
     if (ACPI_SUCCESS (Status))
     {
-        ACPI_INFO ((AE_INFO, "Dynamic OEM Table Load:"));
+        ACPI_DEBUG_PRINT ((ACPI_DB_INFO, "Dynamic OEM Table Load:"));
         AcpiTbPrintTableHeader (0, Table);
     }
 
@@ -583,7 +583,7 @@ AcpiExLoadOp (
         return_ACPI_STATUS (Status);
     }
 
-    ACPI_INFO ((AE_INFO, "Dynamic OEM Table Load:"));
+    ACPI_DEBUG_PRINT ((ACPI_DB_INFO, "Dynamic OEM Table Load:"));
     AcpiTbPrintTableHeader (0, TableDesc.Pointer);
 
     /* Remove the reference by added by AcpiExStore above */

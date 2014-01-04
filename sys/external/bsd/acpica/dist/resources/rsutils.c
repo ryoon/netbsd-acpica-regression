@@ -815,7 +815,7 @@ AcpiRsSetSrsMethodData (
     }
 
     Info->PrefixNode = Node;
-    Info->RelativePathname = METHOD_NAME__SRS;
+    Info->RelativePathname = __UNCONST(METHOD_NAME__SRS);
     Info->Parameters = Args;
     Info->Flags = ACPI_IGNORE_RETURN_VALUE;
 

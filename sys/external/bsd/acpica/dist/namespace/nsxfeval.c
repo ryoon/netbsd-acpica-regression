@@ -86,14 +86,13 @@ AcpiNsResolveReferences (
 ACPI_STATUS
 AcpiEvaluateObjectTyped (
     ACPI_HANDLE             Handle,
-    ACPI_STRING             Pathname,
+    ACPI_CONST_STRING       Pathname,
     ACPI_OBJECT_LIST        *ExternalParams,
     ACPI_BUFFER             *ReturnBuffer,
     ACPI_OBJECT_TYPE        ReturnType)
 {
     ACPI_STATUS             Status;
     BOOLEAN                 FreeBufferOnError = FALSE;
-
 
     ACPI_FUNCTION_TRACE (AcpiEvaluateObjectTyped);
 
@@ -191,7 +190,7 @@ ACPI_EXPORT_SYMBOL (AcpiEvaluateObjectTyped)
 ACPI_STATUS
 AcpiEvaluateObject (
     ACPI_HANDLE             Handle,
-    ACPI_STRING             Pathname,
+    ACPI_CONST_STRING       Pathname,
     ACPI_OBJECT_LIST        *ExternalParams,
     ACPI_BUFFER             *ReturnBuffer)
 {
@@ -258,7 +257,7 @@ AcpiEvaluateObject (
         goto Cleanup;
     }
 
-    Info->RelativePathname = Pathname;
+    Info->RelativePathname = __UNCONST(Pathname);
 
     /*
      * Convert all external objects passed as arguments to the
@@ -272,7 +271,7 @@ AcpiEvaluateObject (
 
         if (Info->ParamCount > ACPI_METHOD_NUM_ARGS)
         {
-            ACPI_WARN_PREDEFINED ((AE_INFO, Pathname, ACPI_WARN_ALWAYS,
+            ACPI_WARN_PREDEFINED ((AE_INFO, __UNCONST(Pathname), ACPI_WARN_ALWAYS,
                 "Excess arguments (%u) - using only %u",
                 Info->ParamCount, ACPI_METHOD_NUM_ARGS));
 

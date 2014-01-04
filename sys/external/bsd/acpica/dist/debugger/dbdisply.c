@@ -114,11 +114,11 @@ typedef struct acpi_handler_info
 
 static ACPI_HANDLER_INFO    AcpiGbl_HandlerList[] =
 {
-    {&AcpiGbl_GlobalNotify[0].Handler,  "System Notifications"},
-    {&AcpiGbl_GlobalNotify[1].Handler,  "Device Notifications"},
-    {&AcpiGbl_TableHandler,             "ACPI Table Events"},
-    {&AcpiGbl_ExceptionHandler,         "Control Method Exceptions"},
-    {&AcpiGbl_InterfaceHandler,         "OSI Invocations"}
+    {&AcpiGbl_GlobalNotify[0].Handler,  __UNCONST("System Notifications")},
+    {&AcpiGbl_GlobalNotify[1].Handler,  __UNCONST("Device Notifications")},
+    {&AcpiGbl_TableHandler,             __UNCONST("ACPI Table Events")},
+    {&AcpiGbl_ExceptionHandler,         __UNCONST("Control Method Exceptions")},
+    {&AcpiGbl_InterfaceHandler,         __UNCONST("OSI Invocations")}
 };
 
 
@@ -815,7 +815,7 @@ AcpiDbDisplayGpes (
     ACPI_GPE_XRUPT_INFO     *GpeXruptInfo;
     ACPI_GPE_EVENT_INFO     *GpeEventInfo;
     ACPI_GPE_REGISTER_INFO  *GpeRegisterInfo;
-    char                    *GpeType;
+    const char              *GpeType;
     ACPI_GPE_NOTIFY_INFO    *Notify;
     UINT32                  GpeIndex;
     UINT32                  Block = 0;

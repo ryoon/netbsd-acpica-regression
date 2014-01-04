@@ -198,7 +198,7 @@ AcpiNsInitializeDevices (
      * part of the ACPI specification.
      */
     Info.EvaluateInfo->PrefixNode = AcpiGbl_RootNode;
-    Info.EvaluateInfo->RelativePathname = METHOD_NAME__INI;
+    Info.EvaluateInfo->RelativePathname = __UNCONST(METHOD_NAME__INI);
     Info.EvaluateInfo->Parameters = NULL;
     Info.EvaluateInfo->Flags = ACPI_IGNORE_RETURN_VALUE;
 
@@ -620,7 +620,7 @@ AcpiNsInitOneDevice (
 
     ACPI_MEMSET (Info, 0, sizeof (ACPI_EVALUATE_INFO));
     Info->PrefixNode = DeviceNode;
-    Info->RelativePathname = METHOD_NAME__INI;
+    Info->RelativePathname = __UNCONST(METHOD_NAME__INI);
     Info->Parameters = NULL;
     Info->Flags = ACPI_IGNORE_RETURN_VALUE;
 

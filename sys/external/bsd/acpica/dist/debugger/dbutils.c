@@ -66,7 +66,7 @@ AcpiDbDumpBuffer (
     UINT32                  Address);
 #endif
 
-static char                 *Converter = "0123456789ABCDEF";
+static const char           *Converter = "0123456789ABCDEF";
 
 
 /*******************************************************************************
