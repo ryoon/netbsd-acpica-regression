@@ -166,6 +166,7 @@ file	external/bsd/acpica/dist/tables/tbxfroot.c		acpica
 # utilities/
 file	external/bsd/acpica/dist/utilities/utaddress.c		acpica
 file	external/bsd/acpica/dist/utilities/utalloc.c		acpica
+file	external/bsd/acpica/dist/utilities/utbuffer.c		acpica
 file	external/bsd/acpica/dist/utilities/utcache.c		acpica
 file	external/bsd/acpica/dist/utilities/utcopy.c		acpica
 file	external/bsd/acpica/dist/utilities/utdebug.c		acpica
