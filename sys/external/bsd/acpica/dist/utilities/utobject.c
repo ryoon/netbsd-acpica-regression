@@ -140,7 +140,6 @@ AcpiUtCreateInternalObjectDbg (
         break;
 
     default:
-
         /* All others have no secondary object */
         break;
     }
@@ -398,7 +397,6 @@ AcpiUtValidInternalObject (
         return (TRUE);
 
     default:
-
         ACPI_DEBUG_PRINT ((ACPI_DB_EXEC,
                 "%p is not not an ACPI operand obj [%s]\n",
                 Object, AcpiUtGetDescriptorName (Object)));
@@ -558,10 +556,12 @@ AcpiUtGetSimpleObjectSize (
         Length += (ACPI_SIZE) InternalObject->String.Length + 1;
         break;
 
+
     case ACPI_TYPE_BUFFER:
 
         Length += (ACPI_SIZE) InternalObject->Buffer.Length;
         break;
+
 
     case ACPI_TYPE_INTEGER:
     case ACPI_TYPE_PROCESSOR:
@@ -571,11 +571,13 @@ AcpiUtGetSimpleObjectSize (
 
         break;
 
+
     case ACPI_TYPE_LOCAL_REFERENCE:
 
         switch (InternalObject->Reference.Class)
         {
         case ACPI_REFCLASS_NAME:
+
             /*
              * Get the actual length of the full pathname to this object.
              * The reference will be converted to the pathname to the object
@@ -590,6 +592,7 @@ AcpiUtGetSimpleObjectSize (
             break;
 
         default:
+
             /*
              * No other reference opcodes are supported.
              * Notably, Locals and Args are not supported, but this may be
@@ -603,6 +606,7 @@ AcpiUtGetSimpleObjectSize (
             break;
         }
         break;
+
 
     default:
 
@@ -652,6 +656,7 @@ AcpiUtGetElementLength (
     switch (ObjectType)
     {
     case ACPI_COPY_TYPE_SIMPLE:
+
         /*
          * Simple object - just get the size (Null object/entry is handled
          * here also) and sum it into the running package length
@@ -665,6 +670,7 @@ AcpiUtGetElementLength (
         Info->Length += ObjectSpace;
         break;
 
+
     case ACPI_COPY_TYPE_PACKAGE:
 
         /* Package object - nothing much to do here, let the walk handle it */
@@ -672,6 +678,7 @@ AcpiUtGetElementLength (
         Info->NumPackages++;
         State->Pkg.ThisTargetObj = NULL;
         break;
+
 
     default:
 

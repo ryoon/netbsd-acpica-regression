@@ -194,6 +194,7 @@ AcpiDmByteList (
 
     case ACPI_DASM_BUFFER:
     default:
+
         /*
          * Not a resource, string, or unicode string.
          * Just dump the buffer

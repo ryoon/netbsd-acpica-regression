@@ -47,7 +47,7 @@
 
 /* Current ACPICA subsystem version in YYYYMMDD format */
 
-#define ACPI_CA_VERSION                 0x20130517
+#define ACPI_CA_VERSION                 0x20130418
 
 #include "acconfig.h"
 #include "actypes.h"
@@ -79,7 +79,6 @@ extern UINT8                AcpiGbl_EnableAmlDebugObject;
 extern UINT8                AcpiGbl_CopyDsdtLocally;
 extern UINT8                AcpiGbl_TruncateIoAddresses;
 extern UINT8                AcpiGbl_DisableAutoRepair;
-extern UINT8                AcpiGbl_DisableSsdtTableLoad;
 
 
 /*

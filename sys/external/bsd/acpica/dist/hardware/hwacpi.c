@@ -120,6 +120,7 @@ AcpiHwSetMode (
         break;
 
     case ACPI_SYS_MODE_LEGACY:
+
         /*
          * BIOS should clear all fixed status bits and restore fixed event
          * enable bits to default
@@ -131,7 +132,6 @@ AcpiHwSetMode (
         break;
 
     default:
-
         return_ACPI_STATUS (AE_BAD_PARAMETER);
     }
 

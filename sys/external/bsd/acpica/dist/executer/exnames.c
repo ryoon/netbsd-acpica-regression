@@ -334,6 +334,7 @@ AcpiExGetNameString (
             HasPrefix = TRUE;
             break;
 
+
         case AML_PARENT_PREFIX:
 
             /* Increment past possibly multiple parent prefixes */
@@ -350,6 +351,7 @@ AcpiExGetNameString (
 
             HasPrefix = TRUE;
             break;
+
 
         default:
 
@@ -386,6 +388,7 @@ AcpiExGetNameString (
             }
             break;
 
+
         case AML_MULTI_NAME_PREFIX_OP:
 
             ACPI_DEBUG_PRINT ((ACPI_DB_LOAD, "MultiNamePrefix at %p\n",
@@ -417,6 +420,7 @@ AcpiExGetNameString (
 
             break;
 
+
         case 0:
 
             /* NullName valid as of 8-12-98 ASL/AML Grammar Update */
@@ -438,6 +442,7 @@ AcpiExGetNameString (
             }
 
             break;
+
 
         default:
 

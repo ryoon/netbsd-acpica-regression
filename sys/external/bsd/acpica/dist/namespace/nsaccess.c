@@ -167,7 +167,6 @@ AcpiNsRootInitialize (
             switch (InitVal->Type)
             {
             case ACPI_TYPE_METHOD:
-
                 ObjDesc->Method.ParamCount = (UINT8) ACPI_TO_INTEGER (Val);
                 ObjDesc->Common.Flags |= AOPOBJ_DATA_VALID;
 
@@ -189,6 +188,7 @@ AcpiNsRootInitialize (
                 ObjDesc->Integer.Value = ACPI_TO_INTEGER (Val);
                 break;
 
+
             case ACPI_TYPE_STRING:
 
                 /* Build an object around the static string */
@@ -197,6 +197,7 @@ AcpiNsRootInitialize (
                 ObjDesc->String.Pointer = Val;
                 ObjDesc->Common.Flags |= AOPOBJ_STATIC_POINTER;
                 break;
+
 
             case ACPI_TYPE_MUTEX:
 
@@ -229,6 +230,7 @@ AcpiNsRootInitialize (
                     }
                 }
                 break;
+
 
             default:
 

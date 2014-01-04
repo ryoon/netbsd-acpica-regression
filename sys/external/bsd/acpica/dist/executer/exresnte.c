@@ -164,6 +164,7 @@ AcpiExResolveNodeToValue (
         }
         break;
 
+
     case ACPI_TYPE_BUFFER:
 
         if (SourceDesc->Common.Type != ACPI_TYPE_BUFFER)
@@ -183,6 +184,7 @@ AcpiExResolveNodeToValue (
         }
         break;
 
+
     case ACPI_TYPE_STRING:
 
         if (SourceDesc->Common.Type != ACPI_TYPE_STRING)
@@ -198,6 +200,7 @@ AcpiExResolveNodeToValue (
         AcpiUtAddReference (ObjDesc);
         break;
 
+
     case ACPI_TYPE_INTEGER:
 
         if (SourceDesc->Common.Type != ACPI_TYPE_INTEGER)
@@ -212,6 +215,7 @@ AcpiExResolveNodeToValue (
         ObjDesc = SourceDesc;
         AcpiUtAddReference (ObjDesc);
         break;
+
 
     case ACPI_TYPE_BUFFER_FIELD:
     case ACPI_TYPE_LOCAL_REGION_FIELD:
@@ -248,6 +252,7 @@ AcpiExResolveNodeToValue (
 
         return_ACPI_STATUS (AE_AML_OPERAND_TYPE);  /* Cannot be AE_TYPE */
 
+
     case ACPI_TYPE_LOCAL_REFERENCE:
 
         switch (SourceDesc->Reference.Class)
@@ -263,7 +268,6 @@ AcpiExResolveNodeToValue (
             break;
 
         default:
-
             /* No named references are allowed here */
 
             ACPI_ERROR ((AE_INFO,
@@ -273,6 +277,7 @@ AcpiExResolveNodeToValue (
             return_ACPI_STATUS (AE_AML_OPERAND_TYPE);
         }
         break;
+
 
     default:
 

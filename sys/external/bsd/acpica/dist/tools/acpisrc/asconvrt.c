@@ -1333,17 +1333,14 @@ AsInsertPrefix (
     switch (Type)
     {
     case SRC_TYPE_STRUCT:
-
         InsertString = "struct ";
         break;
 
     case SRC_TYPE_UNION:
-
         InsertString = "union ";
         break;
 
     default:
-
         return;
     }
 

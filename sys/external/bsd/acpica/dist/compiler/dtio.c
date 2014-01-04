@@ -426,7 +426,7 @@ DtGetNextLine (
     UINT32                  State = DT_NORMAL_TEXT;
     UINT32                  CurrentLineOffset;
     UINT32                  i;
-    int                     c;
+    char                    c;
 
 
     for (i = 0; ;)
@@ -440,7 +440,7 @@ DtGetNextLine (
             UtExpandLineBuffers ();
         }
 
-        c = getc (Handle);
+        c = (char) getc (Handle);
         if (c == EOF)
         {
             switch (State)
@@ -452,7 +452,6 @@ DtGetNextLine (
                 break;
 
             default:
-
                 break;
             }
 
@@ -480,16 +479,14 @@ DtGetNextLine (
 
             /* Normal text, insert char into line buffer */
 
-            Gbl_CurrentLineBuffer[i] = (char) c;
+            Gbl_CurrentLineBuffer[i] = c;
             switch (c)
             {
             case '/':
-
                 State = DT_START_COMMENT;
                 break;
 
             case '"':
-
                 State = DT_START_QUOTED_STRING;
                 LineNotAllBlanks = TRUE;
                 i++;
@@ -504,7 +501,6 @@ DtGetNextLine (
                 break;
 
             case '\n':
-
                 CurrentLineOffset = Gbl_NextLineOffset;
                 Gbl_NextLineOffset = (UINT32) ftell (Handle);
                 Gbl_CurrentLineNumber++;
@@ -531,7 +527,6 @@ DtGetNextLine (
                 break;
 
             default:
-
                 if (c != ' ')
                 {
                     LineNotAllBlanks = TRUE;
@@ -546,30 +541,26 @@ DtGetNextLine (
 
             /* Insert raw chars until end of quoted string */
 
-            Gbl_CurrentLineBuffer[i] = (char) c;
+            Gbl_CurrentLineBuffer[i] = c;
             i++;
 
             switch (c)
             {
             case '"':
-
                 State = DT_NORMAL_TEXT;
                 break;
 
             case '\\':
-
                 State = DT_ESCAPE_SEQUENCE;
                 break;
 
             case '\n':
-
                 AcpiOsPrintf ("ERROR at line %u: Unterminated quoted string\n",
                     Gbl_CurrentLineNumber++);
                 State = DT_NORMAL_TEXT;
                 break;
 
             default:    /* Get next character */
-
                 break;
             }
             break;
@@ -578,7 +569,7 @@ DtGetNextLine (
 
             /* Just copy the escaped character. TBD: sufficient for table compiler? */
 
-            Gbl_CurrentLineBuffer[i] = (char) c;
+            Gbl_CurrentLineBuffer[i] = c;
             i++;
             State = DT_START_QUOTED_STRING;
             break;
@@ -590,24 +581,21 @@ DtGetNextLine (
             switch (c)
             {
             case '*':
-
                 State = DT_SLASH_ASTERISK_COMMENT;
                 break;
 
             case '/':
-
                 State = DT_SLASH_SLASH_COMMENT;
                 break;
 
             default:    /* Not a comment */
-
                 i++;    /* Save the preceding slash */
                 if (i >= Gbl_LineBufferSize)
                 {
                     UtExpandLineBuffers ();
                 }
 
-                Gbl_CurrentLineBuffer[i] = (char) c;
+                Gbl_CurrentLineBuffer[i] = c;
                 i++;
                 State = DT_NORMAL_TEXT;
                 break;
@@ -621,18 +609,15 @@ DtGetNextLine (
             switch (c)
             {
             case '\n':
-
                 Gbl_NextLineOffset = (UINT32) ftell (Handle);
                 Gbl_CurrentLineNumber++;
                 break;
 
             case '*':
-
                 State = DT_END_COMMENT;
                 break;
 
             default:
-
                 break;
             }
             break;
@@ -657,24 +642,20 @@ DtGetNextLine (
             switch (c)
             {
             case '/':
-
                 State = DT_NORMAL_TEXT;
                 break;
 
             case '\n':
-
                 CurrentLineOffset = Gbl_NextLineOffset;
                 Gbl_NextLineOffset = (UINT32) ftell (Handle);
                 Gbl_CurrentLineNumber++;
                 break;
 
             case '*':
-
                 /* Consume all adjacent asterisks */
                 break;
 
             default:
-
                 State = DT_SLASH_ASTERISK_COMMENT;
                 break;
             }
@@ -713,7 +694,6 @@ DtGetNextLine (
             break;
 
         default:
-
             DtFatal (ASL_MSG_COMPILER_INTERNAL, NULL, "Unknown input state");
             return (ASL_EOF);
         }

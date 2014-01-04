@@ -284,7 +284,6 @@ CgWriteAmlOpcode (
         break;
 
     default:
-
         Aml.Opcode = Op->Asl.AmlOpcode;
         break;
     }
@@ -383,9 +382,7 @@ CgWriteAmlOpcode (
         break;
 
     default:
-
         /* All data opcodes must appear above */
-
         break;
     }
 }
@@ -563,9 +560,7 @@ CgWriteNode (
         return;
 
     default:
-
         /* Internal data opcodes must all appear above */
-
         break;
     }
 

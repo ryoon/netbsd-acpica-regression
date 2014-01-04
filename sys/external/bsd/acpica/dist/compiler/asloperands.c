@@ -298,6 +298,7 @@ OpnDoFieldCommon (
             /* Nothing additional to do */
             break;
 
+
         case PARSEOP_OFFSET:
 
             /* New offset into the field */
@@ -341,6 +342,7 @@ OpnDoFieldCommon (
             }
             break;
 
+
         case PARSEOP_NAMESEG:
         case PARSEOP_RESERVED_BYTES:
 
@@ -358,7 +360,6 @@ OpnDoFieldCommon (
                 case AML_FIELD_ACCESS_BYTE:
                 case AML_FIELD_ACCESS_BUFFER:
                 default:
-
                     MinimumLength = 8;
                     break;
 
@@ -379,9 +380,7 @@ OpnDoFieldCommon (
             break;
 
         default:
-
             /* All supported field opcodes must appear above */
-
             break;
         }
 
@@ -611,6 +610,7 @@ OpnDoBuffer (
         }
         break;
 
+
     case PARSEOP_STRING_LITERAL:
 
         /*
@@ -624,16 +624,18 @@ OpnDoBuffer (
         InitializerOp->Asl.ParseOpcode    = PARSEOP_RAW_DATA;
         break;
 
+
     case PARSEOP_RAW_DATA:
 
         /* Buffer nodes are already initialized (e.g. Unicode operator) */
         return;
 
+
     case PARSEOP_DEFAULT_ARG:
         break;
 
-    default:
 
+    default:
         AslError (ASL_ERROR, ASL_MSG_INVALID_OPERAND, InitializerOp,
             "Unknown buffer initializer opcode");
         printf ("Unknown buffer initializer opcode [%s]\n",
@@ -1090,7 +1092,6 @@ OpnAttachNameToNode (
         return;
 
     default:
-
         return;
     }
 
@@ -1129,52 +1130,42 @@ OpnGenerateAmlOperands (
     switch (Op->Asl.ParseOpcode)
     {
     case PARSEOP_DEFINITIONBLOCK:
-
         OpnDoDefinitionBlock (Op);
         break;
 
     case PARSEOP_METHOD:
-
         OpnDoMethod (Op);
         break;
 
     case PARSEOP_MUTEX:
-
         OpnDoMutex (Op);
         break;
 
     case PARSEOP_FIELD:
-
         OpnDoField (Op);
         break;
 
     case PARSEOP_INDEXFIELD:
-
         OpnDoIndexField (Op);
         break;
 
     case PARSEOP_BANKFIELD:
-
         OpnDoBankField (Op);
         break;
 
     case PARSEOP_BUFFER:
-
         OpnDoBuffer (Op);
         break;
 
     case PARSEOP_LOADTABLE:
-
         OpnDoLoadTable (Op);
         break;
 
     case PARSEOP_OPERATIONREGION:
-
         OpnDoRegion (Op);
         break;
 
     case PARSEOP_RESOURCETEMPLATE:
-
         RsDoResourceTemplate (Op);
         break;
 
@@ -1182,11 +1173,9 @@ OpnGenerateAmlOperands (
     case PARSEOP_NAMESTRING:
     case PARSEOP_METHODCALL:
     case PARSEOP_STRING_LITERAL:
-
         break;
 
     default:
-
         break;
     }
 

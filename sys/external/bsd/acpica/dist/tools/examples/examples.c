@@ -119,7 +119,6 @@ main (
     ACPI_FUNCTION_NAME (Examples-main);
 
 
-    ACPI_DEBUG_INITIALIZE (); /* For debug version only */
     InitializeFullAcpi ();
 
     /* Enable debug output, example debug print */

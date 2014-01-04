@@ -180,20 +180,17 @@ OBJECTS = \
 	$(OBJDIR)/tbfadt.o\
 	$(OBJDIR)/tbfind.o\
 	$(OBJDIR)/tbinstal.o\
-	$(OBJDIR)/tbprint.o\
 	$(OBJDIR)/tbutils.o\
 	$(OBJDIR)/tbxface.o\
 	$(OBJDIR)/tbxfload.o\
 	$(OBJDIR)/tbxfroot.o\
 	$(OBJDIR)/utaddress.o\
 	$(OBJDIR)/utalloc.o\
-	$(OBJDIR)/utbuffer.o\
 	$(OBJDIR)/utcache.o\
 	$(OBJDIR)/utcopy.o\
 	$(OBJDIR)/utdebug.o\
 	$(OBJDIR)/utdecode.o\
 	$(OBJDIR)/utdelete.o\
-	$(OBJDIR)/uterror.o\
 	$(OBJDIR)/uteval.o\
 	$(OBJDIR)/utexcep.o\
 	$(OBJDIR)/utglobal.o\
@@ -223,11 +220,7 @@ CFLAGS += \
     -DACPI_EXEC_APP\
     -I$(ACPIEXEC)
 
-LDFLAGS += -lpthread
-
-ifneq ($(HOST),_APPLE)
-LDFLAGS += -lrt
-endif
+LDFLAGS += -lpthread -lrt
 
 #
 # Common Rules

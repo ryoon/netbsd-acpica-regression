@@ -41,8 +41,8 @@
  * POSSIBILITY OF SUCH DAMAGES.
  */
 
+
 #include "acpi.h"
-#include <stdio.h>
 
 #ifdef WIN32
 #pragma warning(disable:4115)   /* warning C4115: (caused by rpcasync.h) */
@@ -55,57 +55,21 @@
 #define _COMPONENT          ACPI_OS_SERVICES
         ACPI_MODULE_NAME    ("oswintbl")
 
-/* Local prototypes */
 
-static char *
-WindowsFormatException (
-    LONG                WinStatus);
-
-/* Globals */
-
-#define LOCAL_BUFFER_SIZE           64
-
-static char             KeyBuffer[LOCAL_BUFFER_SIZE];
-static char             ErrorBuffer[LOCAL_BUFFER_SIZE];
-
-/*
- * Tables supported in the Windows registry. SSDTs are not placed into
- * the registry, a limitation.
- */
-static char             *SupportedTables[] =
-{
-    "DSDT",
-    "RSDT",
-    "FACS",
-    "FACP"
-};
-
-/* Max index for table above */
-
-#define ACPI_OS_MAX_TABLE_INDEX     3
+static char             KeyBuffer[64];
+static char             ErrorBuffer[64];
 
 
-/******************************************************************************
- *
- * FUNCTION:    WindowsFormatException
- *
- * PARAMETERS:  WinStatus       - Status from a Windows system call
- *
- * RETURN:      Formatted (ascii) exception code. Front-end to Windows
- *              FormatMessage interface.
- *
- * DESCRIPTION: Decode a windows exception
- *
- *****************************************************************************/
+/* Little front-end to win FormatMessage */
 
-static char *
-WindowsFormatException (
-    LONG                WinStatus)
+char *
+OsFormatException (
+    LONG                Status)
 {
 
     ErrorBuffer[0] = 0;
-    FormatMessage (FORMAT_MESSAGE_FROM_SYSTEM, NULL, WinStatus, 0,
-        ErrorBuffer, LOCAL_BUFFER_SIZE, NULL);
+    FormatMessage (FORMAT_MESSAGE_FROM_SYSTEM, NULL, Status, 0,
+        ErrorBuffer, 64, NULL);
 
     return (ErrorBuffer);
 }
@@ -113,120 +77,30 @@ WindowsFormatException (
 
 /******************************************************************************
  *
- * FUNCTION:    AcpiOsGetTableByAddress
+ * FUNCTION:    OsGetTable
  *
- * PARAMETERS:  Address         - Physical address of the ACPI table
- *              Table           - Where a pointer to the table is returned
+ * PARAMETERS:  Signature       - ACPI Signature for desired table. must be
+ *                                  a null terminated string.
  *
- * RETURN:      Status; Table buffer is returned if AE_OK.
- *              AE_NOT_FOUND: A valid table was not found at the address
+ * RETURN:      Pointer to the table. NULL if failure.
  *
- * DESCRIPTION: Get an ACPI table via a physical memory address.
- *
- * NOTE:        Cannot be implemented without a Windows device driver.
+ * DESCRIPTION: Get an ACPI table from the Windows registry.
  *
  *****************************************************************************/
 
-ACPI_STATUS
-AcpiOsGetTableByAddress (
-    ACPI_PHYSICAL_ADDRESS   Address,
-    ACPI_TABLE_HEADER       **Table)
+ACPI_TABLE_HEADER *
+OsGetTable (
+    char                *Signature)
 {
+    HKEY                Handle = NULL;
+    ULONG               i;
+    LONG                Status;
+    ULONG               Type;
+    ULONG               NameSize;
+    ULONG               DataSize;
+    HKEY                SubKey;
+    ACPI_TABLE_HEADER   *ReturnTable;
 
-    fprintf (stderr, "Get table by address is not supported on Windows\n");
-    return (AE_SUPPORT);
-}
-
-
-/******************************************************************************
- *
- * FUNCTION:    AcpiOsGetTableByIndex
- *
- * PARAMETERS:  Index           - Which table to get
- *              Table           - Where a pointer to the table is returned
- *              Address         - Where the table physical address is returned
- *
- * RETURN:      Status; Table buffer and physical address returned if AE_OK.
- *              AE_LIMIT: Index is beyond valid limit
- *
- * DESCRIPTION: Get an ACPI table via an index value (0 through n). Returns
- *              AE_LIMIT when an invalid index is reached. Index is not
- *              necessarily an index into the RSDT/XSDT.
- *              Table is obtained from the Windows registry.
- *
- * NOTE:        Cannot get the physical address from the windows registry;
- *              zero is returned instead.
- *
- *****************************************************************************/
-
-ACPI_STATUS
-AcpiOsGetTableByIndex (
-    UINT32                  Index,
-    ACPI_TABLE_HEADER       **Table,
-    ACPI_PHYSICAL_ADDRESS   *Address)
-{
-    ACPI_STATUS             Status;
-
-
-    if (Index > ACPI_OS_MAX_TABLE_INDEX)
-    {
-        return (AE_LIMIT);
-    }
-
-    Status = AcpiOsGetTableByName (SupportedTables[Index], 0, Table, Address);
-    return (Status);
-}
-
-
-/******************************************************************************
- *
- * FUNCTION:    AcpiOsGetTableByName
- *
- * PARAMETERS:  Signature       - ACPI Signature for desired table. Must be
- *                                a null terminated 4-character string.
- *              Instance        - For SSDTs (0...n). Use 0 otherwise.
- *              Table           - Where a pointer to the table is returned
- *              Address         - Where the table physical address is returned
- *
- * RETURN:      Status; Table buffer and physical address returned if AE_OK.
- *              AE_LIMIT: Instance is beyond valid limit
- *              AE_NOT_FOUND: A table with the signature was not found
- *
- * DESCRIPTION: Get an ACPI table via a table signature (4 ASCII characters).
- *              Returns AE_LIMIT when an invalid instance is reached.
- *              Table is obtained from the Windows registry.
- *
- * NOTE:        Assumes the input signature is uppercase.
- *              Cannot get the physical address from the windows registry;
- *              zero is returned instead.
- *
- *****************************************************************************/
-
-ACPI_STATUS
-AcpiOsGetTableByName (
-    char                    *Signature,
-    UINT32                  Instance,
-    ACPI_TABLE_HEADER       **Table,
-    ACPI_PHYSICAL_ADDRESS   *Address)
-{
-    HKEY                    Handle = NULL;
-    LONG                    WinStatus;
-    ULONG                   Type;
-    ULONG                   NameSize;
-    ULONG                   DataSize;
-    HKEY                    SubKey;
-    ULONG                   i;
-    ACPI_TABLE_HEADER       *ReturnTable;
-
-
-    /*
-     * Windows has no SSDTs in the registry, so multiple instances are
-     * not supported.
-     */
-    if (Instance > 0)
-    {
-        return (AE_LIMIT);
-    }
 
     /* Get a handle to the table key */
 
@@ -235,10 +109,10 @@ AcpiOsGetTableByName (
         ACPI_STRCPY (KeyBuffer, "HARDWARE\\ACPI\\");
         ACPI_STRCAT (KeyBuffer, Signature);
 
-        WinStatus = RegOpenKeyEx (HKEY_LOCAL_MACHINE, KeyBuffer,
-            0L, KEY_READ, &Handle);
+        Status = RegOpenKeyEx (HKEY_LOCAL_MACHINE, KeyBuffer,
+                    0L, KEY_READ, &Handle);
 
-        if (WinStatus != ERROR_SUCCESS)
+        if (Status != ERROR_SUCCESS)
         {
             /*
              * Somewhere along the way, MS changed the registry entry for
@@ -252,16 +126,12 @@ AcpiOsGetTableByName (
             {
                 Signature = "FADT";
             }
-            else if (ACPI_COMPARE_NAME (Signature, "XSDT"))
-            {
-                Signature = "RSDT";
-            }
             else
             {
-                fprintf (stderr,
-                    "Could not find %s in registry at %s: %s (WinStatus=0x%X)\n",
-                    Signature, KeyBuffer, WindowsFormatException (WinStatus), WinStatus);
-                return (AE_NOT_FOUND);
+                AcpiOsPrintf (
+                    "Could not find %s in registry at %s: %s (Status=0x%X)\n",
+                    Signature, KeyBuffer, OsFormatException (Status), Status);
+                return (NULL);
             }
         }
         else
@@ -270,23 +140,23 @@ AcpiOsGetTableByName (
         }
     }
 
-    /* Actual data for the table is down a couple levels */
+    /* Actual data for table is down a couple levels */
 
     for (i = 0; ;)
     {
-        WinStatus = RegEnumKey (Handle, i, KeyBuffer, sizeof (KeyBuffer));
-        i++;
-        if (WinStatus == ERROR_NO_MORE_ITEMS)
+        Status = RegEnumKey (Handle, i, KeyBuffer, sizeof (KeyBuffer));
+        i += 1;
+        if (Status == ERROR_NO_MORE_ITEMS)
         {
             break;
         }
 
-        WinStatus = RegOpenKey (Handle, KeyBuffer, &SubKey);
-        if (WinStatus != ERROR_SUCCESS)
+        Status = RegOpenKey (Handle, KeyBuffer, &SubKey);
+        if (Status != ERROR_SUCCESS)
         {
-            fprintf (stderr, "Could not open %s entry: %s\n",
-                Signature, WindowsFormatException (WinStatus));
-            return (AE_ERROR);
+            AcpiOsPrintf ("Could not open %s entry: %s\n",
+                Signature, OsFormatException (Status));
+            return (NULL);
         }
 
         RegCloseKey (Handle);
@@ -296,38 +166,38 @@ AcpiOsGetTableByName (
 
     /* Find the (binary) table entry */
 
-    for (i = 0; ; i++)
+    for (i = 0; ;)
     {
         NameSize = sizeof (KeyBuffer);
-        WinStatus = RegEnumValue (Handle, i, KeyBuffer, &NameSize, NULL,
-            &Type, NULL, 0);
-        if (WinStatus != ERROR_SUCCESS)
+        Status = RegEnumValue (Handle, i, KeyBuffer, &NameSize,
+                    NULL, &Type, NULL, 0);
+        if (Status != ERROR_SUCCESS)
         {
-            fprintf (stderr, "Could not get %s registry entry: %s\n",
-                Signature, WindowsFormatException (WinStatus));
-            return (AE_ERROR);
+            AcpiOsPrintf ("Could not get %s registry entry: %s\n",
+                Signature, OsFormatException (Status));
+            return (NULL);
         }
 
         if (Type == REG_BINARY)
         {
             break;
         }
+        i += 1;
     }
 
     /* Get the size of the table */
 
-    WinStatus = RegQueryValueEx (Handle, KeyBuffer, NULL, NULL,
-        NULL, &DataSize);
-    if (WinStatus != ERROR_SUCCESS)
+    Status = RegQueryValueEx (Handle, KeyBuffer, NULL, NULL, NULL, &DataSize);
+    if (Status != ERROR_SUCCESS)
     {
-        fprintf (stderr, "Could not read the %s table size: %s\n",
-            Signature, WindowsFormatException (WinStatus));
-        return (AE_ERROR);
+        AcpiOsPrintf ("Could not read the %s table size: %s\n",
+            Signature, OsFormatException (Status));
+        return (NULL);
     }
 
     /* Allocate a new buffer for the table */
 
-    ReturnTable = malloc (DataSize);
+    ReturnTable = AcpiOsAllocate (DataSize);
     if (!ReturnTable)
     {
         goto Cleanup;
@@ -335,20 +205,17 @@ AcpiOsGetTableByName (
 
     /* Get the actual table from the registry */
 
-    WinStatus = RegQueryValueEx (Handle, KeyBuffer, NULL, NULL,
-        (UCHAR *) ReturnTable, &DataSize);
-    if (WinStatus != ERROR_SUCCESS)
+    Status = RegQueryValueEx (Handle, KeyBuffer, NULL, NULL,
+                (UCHAR *) ReturnTable, &DataSize);
+    if (Status != ERROR_SUCCESS)
     {
-        fprintf (stderr, "Could not read %s data: %s\n",
-            Signature, WindowsFormatException (WinStatus));
-        free (ReturnTable);
-        return (AE_ERROR);
+        AcpiOsPrintf ("Could not read %s data: %s\n",
+            Signature, OsFormatException (Status));
+        AcpiOsFree (ReturnTable);
+        return (NULL);
     }
 
 Cleanup:
     RegCloseKey (Handle);
-
-    *Table = ReturnTable;
-    *Address = 0;
-    return (AE_OK);
+    return (ReturnTable);
 }

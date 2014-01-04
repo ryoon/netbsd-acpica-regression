@@ -239,7 +239,6 @@ main (
     int                     j;
 
 
-    ACPI_DEBUG_INITIALIZE (); /* For debug version only */
     printf (ACPI_COMMON_SIGNON ("ACPI Namespace Dump Utility"));
 
     if (argc < 2)
@@ -263,7 +262,6 @@ main (
     case '?':
     case 'h':
     default:
-
         usage();
         return (0);
     }

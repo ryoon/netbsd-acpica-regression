@@ -69,7 +69,6 @@ OBJECTS = \
 	$(OBJDIR)/aslopcodes.o\
 	$(OBJDIR)/asloperands.o\
 	$(OBJDIR)/aslopt.o\
-	$(OBJDIR)/asloptions.o\
 	$(OBJDIR)/aslpredef.o\
 	$(OBJDIR)/aslprepkg.o\
 	$(OBJDIR)/aslresource.o\
@@ -173,18 +172,15 @@ OBJECTS = \
 	$(OBJDIR)/pswalk.o\
 	$(OBJDIR)/tbfadt.o\
 	$(OBJDIR)/tbinstal.o\
-	$(OBJDIR)/tbprint.o\
 	$(OBJDIR)/tbutils.o\
 	$(OBJDIR)/tbxface.o\
 	$(OBJDIR)/utaddress.o\
 	$(OBJDIR)/utalloc.o\
-	$(OBJDIR)/utbuffer.o\
 	$(OBJDIR)/utcache.o\
 	$(OBJDIR)/utcopy.o\
 	$(OBJDIR)/utdebug.o\
 	$(OBJDIR)/utdecode.o\
 	$(OBJDIR)/utdelete.o\
-	$(OBJDIR)/uterror.o\
 	$(OBJDIR)/utexcep.o\
 	$(OBJDIR)/utglobal.o\
 	$(OBJDIR)/utinit.o\

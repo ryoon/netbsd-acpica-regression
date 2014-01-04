@@ -179,11 +179,13 @@ AcpiDbDumpExternalObject (
         AcpiOsPrintf ("[Null Object] (Type=0)\n");
         break;
 
+
     case ACPI_TYPE_INTEGER:
 
         AcpiOsPrintf ("[Integer] = %8.8X%8.8X\n",
                     ACPI_FORMAT_UINT64 (ObjDesc->Integer.Value));
         break;
+
 
     case ACPI_TYPE_STRING:
 
@@ -191,6 +193,7 @@ AcpiDbDumpExternalObject (
         AcpiUtPrintString (ObjDesc->String.Pointer, ACPI_UINT8_MAX);
         AcpiOsPrintf ("\n");
         break;
+
 
     case ACPI_TYPE_BUFFER:
 
@@ -210,6 +213,7 @@ AcpiDbDumpExternalObject (
         }
         break;
 
+
     case ACPI_TYPE_PACKAGE:
 
         AcpiOsPrintf ("[Package] Contains %u Elements:\n",
@@ -221,21 +225,25 @@ AcpiDbDumpExternalObject (
         }
         break;
 
+
     case ACPI_TYPE_LOCAL_REFERENCE:
 
         AcpiOsPrintf ("[Object Reference] = ");
         AcpiDmDisplayInternalObject (ObjDesc->Reference.Handle, NULL);
         break;
 
+
     case ACPI_TYPE_PROCESSOR:
 
         AcpiOsPrintf ("[Processor]\n");
         break;
 
+
     case ACPI_TYPE_POWER:
 
         AcpiOsPrintf ("[Power Resource]\n");
         break;
+
 
     default:
 

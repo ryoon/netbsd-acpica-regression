@@ -99,10 +99,8 @@ main (
     int                     Status = AE_OK;
 
 
-    ACPI_DEBUG_INITIALIZE (); /* For debug version only */
-
     AcpiGbl_DebugFile = NULL;
-    AcpiGbl_DbOutputFlags = DB_CONSOLE_OUTPUT;
+    AcpiGbl_DbOutputFlags = DB_CONSOLE_OUTPUT ;
 
     AcpiOsInitialize ();
     printf (ACPI_COMMON_SIGNON ("ACPI Binary AML File Utility"));
@@ -179,10 +177,9 @@ main (
         break;
 
     default:
-
         AbDisplayUsage (0);
         return (-1);
     }
 
-    return (Status);
+    return Status;
 }

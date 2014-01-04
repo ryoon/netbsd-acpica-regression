@@ -267,7 +267,6 @@ AcpiDbEnumerateObject (
         break;
 
     default:
-
         break;
     }
 }
@@ -480,6 +479,7 @@ AcpiDbDisplayStatistics (
         }
         break;
 
+
     case CMD_STAT_SIZES:
 
         AcpiOsPrintf ("\nInternal object sizes:\n\n");
@@ -530,6 +530,7 @@ AcpiDbDisplayStatistics (
         AcpiOsPrintf ("Notify Info      %3d\n", sizeof (ACPI_NOTIFY_INFO));
         break;
 
+
     case CMD_STAT_STACK:
 #if defined(ACPI_DEBUG_OUTPUT)
 
@@ -544,7 +545,6 @@ AcpiDbDisplayStatistics (
         break;
 
     default:
-
         break;
     }
 
