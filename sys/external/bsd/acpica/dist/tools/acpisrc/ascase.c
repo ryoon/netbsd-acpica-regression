@@ -92,14 +92,7 @@ AsLowerCaseString (
          * Check for translation escape string -- means to ignore
          * blocks of code while replacing
          */
-        if (Gbl_IgnoreTranslationEscapes)
-        {
-            SubString2 = NULL;
-        }
-        else
-        {
-            SubString2 = strstr (SubBuffer, AS_START_IGNORE);
-        }
+        SubString2 = strstr (SubBuffer, AS_START_IGNORE);
 
         if ((SubString2) &&
             (SubString2 < SubString1))

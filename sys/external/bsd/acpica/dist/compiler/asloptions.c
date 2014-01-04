@@ -267,21 +267,11 @@ AslDoOptions (
 
     case 'e':   /* External files for disassembler */
 
-        /* Get entire list of external files */
-
-        AcpiGbl_Optind--;
-
-        while (argv[AcpiGbl_Optind] &&
-              (argv[AcpiGbl_Optind][0] != '-'))
+        Status = AcpiDmAddToExternalFileList (AcpiGbl_Optarg);
+        if (ACPI_FAILURE (Status))
         {
-            Status = AcpiDmAddToExternalFileList (argv[AcpiGbl_Optind]);
-            if (ACPI_FAILURE (Status))
-            {
-                printf ("Could not add %s to external list\n", argv[AcpiGbl_Optind]);
-                return (-1);
-            }
-
-            AcpiGbl_Optind++;
+            printf ("Could not add %s to external list\n", AcpiGbl_Optarg);
+            return (-1);
         }
         break;
 

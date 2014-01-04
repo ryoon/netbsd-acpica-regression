@@ -288,6 +288,7 @@ FlSplitInputPathname (
 
 
     *OutDirectoryPath = NULL;
+    *OutFilename = NULL;
 
     if (!InputPath)
     {
@@ -333,10 +334,6 @@ FlSplitInputPathname (
     }
 
     *OutDirectoryPath = DirectoryPath;
-
-    if (OutFilename)
-    {
-        *OutFilename = Filename;
-    }
+    *OutFilename = Filename;
     return (AE_OK);
 }

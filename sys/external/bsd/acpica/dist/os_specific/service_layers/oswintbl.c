@@ -42,8 +42,6 @@
  */
 
 #include "acpi.h"
-#include "accommon.h"
-#include "acutils.h"
 #include <stdio.h>
 
 #ifdef WIN32
@@ -238,10 +236,7 @@ AcpiOsGetTableByName (
     while (1)
     {
         ACPI_STRCPY (KeyBuffer, "HARDWARE\\ACPI\\");
-        if (AcpiUtSafeStrcat (KeyBuffer, sizeof (KeyBuffer), Signature))
-        {
-            return (AE_BUFFER_OVERFLOW);
-        }
+        ACPI_STRCAT (KeyBuffer, Signature);
 
         WinStatus = RegOpenKeyEx (HKEY_LOCAL_MACHINE, KeyBuffer,
             0L, KEY_READ, &Handle);

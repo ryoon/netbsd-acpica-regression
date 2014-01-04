@@ -39,7 +39,6 @@ HEADERS = \
     $(wildcard $(ACPIEXEC)/*.h)
 
 OBJECTS = \
-	$(OBJDIR)/acgetline.o\
 	$(OBJDIR)/aeexec.o\
 	$(OBJDIR)/aehandlers.o\
 	$(OBJDIR)/aemain.o\

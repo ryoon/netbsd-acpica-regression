@@ -492,7 +492,7 @@ AcpiDbReadTableFromFile (
     File = fopen (Filename, "rb");
     if (!File)
     {
-        perror ("Could not open input file");
+        AcpiOsPrintf ("Could not open input file %s\n", Filename);
         return (AE_ERROR);
     }
 
