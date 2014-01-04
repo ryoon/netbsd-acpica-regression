@@ -505,7 +505,7 @@ AcpiNsRepair_CST (
      * C-state type, in ascending order.
      */
     Status = AcpiNsCheckSortedList (Info, ReturnObject, 1, 4, 1,
-                ACPI_SORT_ASCENDING, "C-State Type");
+                ACPI_SORT_ASCENDING, __UNCONST("C-State Type"));
     if (ACPI_FAILURE (Status))
     {
         return (Status);
