@@ -158,6 +158,7 @@ file	external/bsd/acpica/dist/resources/rsxface.c		acpica
 file	external/bsd/acpica/dist/tables/tbfadt.c		acpica
 file	external/bsd/acpica/dist/tables/tbfind.c		acpica
 file	external/bsd/acpica/dist/tables/tbinstal.c		acpica
+file	external/bsd/acpica/dist/tables/tbprint.c		acpica
 file	external/bsd/acpica/dist/tables/tbutils.c		acpica
 file	external/bsd/acpica/dist/tables/tbxface.c		acpica
 file	external/bsd/acpica/dist/tables/tbxfload.c		acpica
