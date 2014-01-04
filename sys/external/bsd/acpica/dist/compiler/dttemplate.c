@@ -117,21 +117,13 @@ DtCreateTemplates (
 
 
     AslInitializeGlobals ();
-
-    /* Default (no signature) is DSDT */
-
-    if (!Signature)
-    {
-        Signature = "DSDT";
-        goto GetTemplate;
-    }
-
     AcpiUtStrupr (Signature);
-    if (!ACPI_STRCMP (Signature, "ALL") ||
+
+    /* Create all known templates if requested */
+
+    if (!ACPI_STRNCMP (Signature, "ALL", 3) ||
         !ACPI_STRCMP (Signature, "*"))
     {
-        /* Create all available/known templates */
-
         Status = DtCreateAllTemplates ();
         return (Status);
     }
@@ -144,9 +136,7 @@ DtCreateTemplates (
      */
     if (strlen (Signature) != ACPI_NAME_SIZE)
     {
-        fprintf (stderr,
-            "%s: Invalid ACPI table signature (length must be 4 characters)\n",
-            Signature);
+        fprintf (stderr, "%s, Invalid ACPI table signature\n", Signature);
         return (AE_ERROR);
     }
 
@@ -163,20 +153,19 @@ DtCreateTemplates (
         Signature = "FACP";
     }
 
-GetTemplate:
     TableData = AcpiDmGetTableData (Signature);
     if (TableData)
     {
         if (!TableData->Template)
         {
-            fprintf (stderr, "%4.4s: No template available\n", Signature);
+            fprintf (stderr, "%4.4s, No template available\n", Signature);
             return (AE_ERROR);
         }
     }
     else if (!AcpiUtIsSpecialTable (Signature))
     {
         fprintf (stderr,
-            "%4.4s: Unrecognized ACPI table signature\n", Signature);
+            "%4.4s, Unrecognized ACPI table signature\n", Signature);
         return (AE_ERROR);
     }
 

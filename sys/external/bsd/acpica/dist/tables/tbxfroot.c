@@ -51,6 +51,12 @@
 #define _COMPONENT          ACPI_TABLES
         ACPI_MODULE_NAME    ("tbxfroot")
 
+/* Local prototypes */
+
+static ACPI_STATUS
+AcpiTbValidateRsdp (
+    ACPI_TABLE_RSDP         *Rsdp);
+
 
 /*******************************************************************************
  *
@@ -64,7 +70,7 @@
  *
  ******************************************************************************/
 
-ACPI_STATUS
+static ACPI_STATUS
 AcpiTbValidateRsdp (
     ACPI_TABLE_RSDP         *Rsdp)
 {
@@ -75,7 +81,7 @@ AcpiTbValidateRsdp (
      * Note: Sometimes there exists more than one RSDP in memory; the valid
      * RSDP has a valid checksum, all others have an invalid checksum.
      */
-    if (ACPI_STRNCMP ((char *) Rsdp->Signature, ACPI_SIG_RSDP,
+    if (ACPI_STRNCMP ((char *) Rsdp, ACPI_SIG_RSDP,
             sizeof (ACPI_SIG_RSDP)-1) != 0)
     {
         /* Nope, BAD Signature */

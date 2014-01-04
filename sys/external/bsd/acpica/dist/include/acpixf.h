@@ -47,7 +47,7 @@
 
 /* Current ACPICA subsystem version in YYYYMMDD format */
 
-#define ACPI_CA_VERSION                 0x20130725
+#define ACPI_CA_VERSION                 0x20130626
 
 #include "acconfig.h"
 #include "actypes.h"
@@ -61,7 +61,6 @@ extern UINT32               AcpiCurrentGpeCount;
 extern ACPI_TABLE_FADT      AcpiGbl_FADT;
 extern BOOLEAN              AcpiGbl_SystemAwakeAndRunning;
 extern BOOLEAN              AcpiGbl_ReducedHardware;        /* ACPI 5.0 */
-extern UINT8                AcpiGbl_OsiData;
 
 /* Runtime configuration of debug print levels */
 
@@ -178,10 +177,6 @@ ACPI_STATUS
 AcpiRemoveInterface (
     ACPI_STRING             InterfaceName);
 
-ACPI_STATUS
-AcpiUpdateInterfaces (
-    UINT8                   Action);
-
 UINT32
 AcpiCheckAddressRange (
     ACPI_ADR_SPACE_TYPE     SpaceId,
@@ -273,8 +268,8 @@ AcpiWalkNamespace (
     ACPI_OBJECT_TYPE        Type,
     ACPI_HANDLE             StartObject,
     UINT32                  MaxDepth,
-    ACPI_WALK_CALLBACK      DescendingCallback,
-    ACPI_WALK_CALLBACK      AscendingCallback,
+    ACPI_WALK_CALLBACK      PreOrderVisit,
+    ACPI_WALK_CALLBACK      PostOrderVisit,
     void                    *Context,
     void                    **ReturnValue);
 

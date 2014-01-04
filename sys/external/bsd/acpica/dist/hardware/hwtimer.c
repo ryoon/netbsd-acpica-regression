@@ -115,14 +115,8 @@ AcpiGetTimer (
         return_ACPI_STATUS (AE_BAD_PARAMETER);
     }
 
-    /* ACPI 5.0A: PM Timer is optional */
-
-    if (!AcpiGbl_FADT.XPmTimerBlock.Address)
-    {
-        return_ACPI_STATUS (AE_SUPPORT);
-    }
-
     Status = AcpiHwRead (Ticks, &AcpiGbl_FADT.XPmTimerBlock);
+
     return_ACPI_STATUS (Status);
 }
 
@@ -175,13 +169,6 @@ AcpiGetTimerDuration (
     if (!TimeElapsed)
     {
         return_ACPI_STATUS (AE_BAD_PARAMETER);
-    }
-
-    /* ACPI 5.0A: PM Timer is optional */
-
-    if (!AcpiGbl_FADT.XPmTimerBlock.Address)
-    {
-        return_ACPI_STATUS (AE_SUPPORT);
     }
 
     /*
