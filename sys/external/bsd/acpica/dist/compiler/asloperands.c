@@ -971,15 +971,12 @@ OpnDoDefinitionBlock (
         Gbl_TableId = AcpiOsAllocate (Length + 1);
         ACPI_STRCPY (Gbl_TableId, Child->Asl.Value.String);
 
-        /*
-         * Convert anything non-alphanumeric to an underscore. This
-         * allows us to use the TableID to generate unique C symbols.
-         */
         for (i = 0; i < Length; i++)
         {
-            if (!isalnum ((int) Gbl_TableId[i]))
+            if (Gbl_TableId[i] == ' ')
             {
-                Gbl_TableId[i] = '_';
+                Gbl_TableId[i] = 0;
+                break;
             }
         }
     }

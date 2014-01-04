@@ -574,9 +574,9 @@ AcpiNsResolveReferences (
  * PARAMETERS:  Type                - ACPI_OBJECT_TYPE to search for
  *              StartObject         - Handle in namespace where search begins
  *              MaxDepth            - Depth to which search is to reach
- *              DescendingCallback  - Called during tree descent
+ *              PreOrderVisit       - Called during tree pre-order visit
  *                                    when an object of "Type" is found
- *              AscendingCallback   - Called during tree ascent
+ *              PostOrderVisit      - Called during tree post-order visit
  *                                    when an object of "Type" is found
  *              Context             - Passed to user function(s) above
  *              ReturnValue         - Location where return value of
@@ -605,8 +605,8 @@ AcpiWalkNamespace (
     ACPI_OBJECT_TYPE        Type,
     ACPI_HANDLE             StartObject,
     UINT32                  MaxDepth,
-    ACPI_WALK_CALLBACK      DescendingCallback,
-    ACPI_WALK_CALLBACK      AscendingCallback,
+    ACPI_WALK_CALLBACK      PreOrderVisit,
+    ACPI_WALK_CALLBACK      PostOrderVisit,
     void                    *Context,
     void                    **ReturnValue)
 {
@@ -620,7 +620,7 @@ AcpiWalkNamespace (
 
     if ((Type > ACPI_TYPE_LOCAL_MAX) ||
         (!MaxDepth)                  ||
-        (!DescendingCallback && !AscendingCallback))
+        (!PreOrderVisit && !PostOrderVisit))
     {
         return_ACPI_STATUS (AE_BAD_PARAMETER);
     }
@@ -655,8 +655,8 @@ AcpiWalkNamespace (
     }
 
     Status = AcpiNsWalkNamespace (Type, StartObject, MaxDepth,
-                ACPI_NS_WALK_UNLOCK, DescendingCallback,
-                AscendingCallback, Context, ReturnValue);
+                ACPI_NS_WALK_UNLOCK, PreOrderVisit,
+                PostOrderVisit, Context, ReturnValue);
 
     (void) AcpiUtReleaseMutex (ACPI_MTX_NAMESPACE);
 

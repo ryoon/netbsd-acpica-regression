@@ -166,16 +166,6 @@ AcpiNsCheckReturnValue (
     }
 
     /*
-     *
-     * 4) If there is no return value and it is optional, just return
-     * AE_OK (_WAK).
-     */
-    if (!(*ReturnObjectPtr))
-    {
-        goto Exit;
-    }
-
-    /*
      * For returned Package objects, check the type of all sub-objects.
      * Note: Package may have been newly created by call above.
      */
@@ -303,13 +293,7 @@ TypeErrorExit:
 
     AcpiUtGetExpectedReturnTypes (TypeBuffer, ExpectedBtypes);
 
-    if (!ReturnObject)
-    {
-        ACPI_WARN_PREDEFINED ((AE_INFO, Info->FullPathname, Info->NodeFlags,
-            "Expected return object of type %s",
-            TypeBuffer));
-    }
-    else if (PackageIndex == ACPI_NOT_PACKAGE_ELEMENT)
+    if (PackageIndex == ACPI_NOT_PACKAGE_ELEMENT)
     {
         ACPI_WARN_PREDEFINED ((AE_INFO, Info->FullPathname, Info->NodeFlags,
             "Return type mismatch - found %s, expected %s",
