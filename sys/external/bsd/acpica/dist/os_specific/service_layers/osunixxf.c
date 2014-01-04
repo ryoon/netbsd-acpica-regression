@@ -91,7 +91,7 @@ typedef void* (*PTHREAD_CALLBACK) (void *);
 /* Terminal support for AcpiExec only */
 
 #ifdef ACPI_EXEC_APP
-#include <termios.h>
+#include <termio.h>
 
 struct termios              OriginalTermAttributes;
 

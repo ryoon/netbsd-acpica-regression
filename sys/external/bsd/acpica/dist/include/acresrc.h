@@ -197,7 +197,7 @@ AcpiRsCreateResourceList (
 
 ACPI_STATUS
 AcpiRsCreateAmlResources (
-    ACPI_BUFFER             *ResourceList,
+    ACPI_RESOURCE           *LinkedListBuffer,
     ACPI_BUFFER             *OutputBuffer);
 
 ACPI_STATUS
@@ -251,8 +251,7 @@ AcpiRsGetListLength (
 
 ACPI_STATUS
 AcpiRsGetAmlLength (
-    ACPI_RESOURCE           *ResourceList,
-    ACPI_SIZE               ResourceListSize,
+    ACPI_RESOURCE           *LinkedListBuffer,
     ACPI_SIZE               *SizeNeeded);
 
 ACPI_STATUS
