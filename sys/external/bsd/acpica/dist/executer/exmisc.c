@@ -115,12 +115,15 @@ AcpiExGetObjectReference (
         }
         break;
 
+
     case ACPI_DESC_TYPE_NAMED:
+
         /*
          * A named reference that has already been resolved to a Node
          */
         ReferencedObj = ObjDesc;
         break;
+
 
     default:
 
@@ -283,23 +286,19 @@ AcpiExDoConcatenate (
     switch (Operand0->Common.Type)
     {
     case ACPI_TYPE_INTEGER:
-
         Status = AcpiExConvertToInteger (Operand1, &LocalOperand1, 16);
         break;
 
     case ACPI_TYPE_STRING:
-
         Status = AcpiExConvertToString (Operand1, &LocalOperand1,
                     ACPI_IMPLICIT_CONVERT_HEX);
         break;
 
     case ACPI_TYPE_BUFFER:
-
         Status = AcpiExConvertToBuffer (Operand1, &LocalOperand1);
         break;
 
     default:
-
         ACPI_ERROR ((AE_INFO, "Invalid object type: 0x%X",
             Operand0->Common.Type));
         Status = AE_AML_INTERNAL;
@@ -451,29 +450,36 @@ AcpiExDoMathOp (
 
         return (Integer0 + Integer1);
 
+
     case AML_BIT_AND_OP:            /* And (Integer0, Integer1, Result) */
 
         return (Integer0 & Integer1);
+
 
     case AML_BIT_NAND_OP:           /* NAnd (Integer0, Integer1, Result) */
 
         return (~(Integer0 & Integer1));
 
+
     case AML_BIT_OR_OP:             /* Or (Integer0, Integer1, Result) */
 
         return (Integer0 | Integer1);
+
 
     case AML_BIT_NOR_OP:            /* NOr (Integer0, Integer1, Result) */
 
         return (~(Integer0 | Integer1));
 
+
     case AML_BIT_XOR_OP:            /* XOr (Integer0, Integer1, Result) */
 
         return (Integer0 ^ Integer1);
 
+
     case AML_MULTIPLY_OP:           /* Multiply (Integer0, Integer1, Result) */
 
         return (Integer0 * Integer1);
+
 
     case AML_SHIFT_LEFT_OP:         /* ShiftLeft (Operand, ShiftCount, Result)*/
 
@@ -487,6 +493,7 @@ AcpiExDoMathOp (
         }
         return (Integer0 << Integer1);
 
+
     case AML_SHIFT_RIGHT_OP:        /* ShiftRight (Operand, ShiftCount, Result) */
 
         /*
@@ -498,6 +505,7 @@ AcpiExDoMathOp (
             return (0);
         }
         return (Integer0 >> Integer1);
+
 
     case AML_SUBTRACT_OP:           /* Subtract (Integer0, Integer1, Result) */
 
@@ -563,7 +571,6 @@ AcpiExDoLogicalNumericOp (
         break;
 
     default:
-
         Status = AE_AML_INTERNAL;
         break;
     }
@@ -631,23 +638,19 @@ AcpiExDoLogicalOp (
     switch (Operand0->Common.Type)
     {
     case ACPI_TYPE_INTEGER:
-
         Status = AcpiExConvertToInteger (Operand1, &LocalOperand1, 16);
         break;
 
     case ACPI_TYPE_STRING:
-
         Status = AcpiExConvertToString (Operand1, &LocalOperand1,
                     ACPI_IMPLICIT_CONVERT_HEX);
         break;
 
     case ACPI_TYPE_BUFFER:
-
         Status = AcpiExConvertToBuffer (Operand1, &LocalOperand1);
         break;
 
     default:
-
         Status = AE_AML_INTERNAL;
         break;
     }
@@ -696,7 +699,6 @@ AcpiExDoLogicalOp (
             break;
 
         default:
-
             Status = AE_AML_INTERNAL;
             break;
         }
@@ -774,7 +776,6 @@ AcpiExDoLogicalOp (
             break;
 
         default:
-
             Status = AE_AML_INTERNAL;
             break;
         }

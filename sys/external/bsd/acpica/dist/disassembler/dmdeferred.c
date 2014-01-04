@@ -128,7 +128,6 @@ AcpiDmParseDeferredOps (
             break;
 
         default:
-
             ACPI_ERROR ((AE_INFO, "Unhandled deferred AML opcode [0x%.4X]",
                  Op->Common.AmlOpcode));
             break;
@@ -266,7 +265,6 @@ AcpiDmDeferredParse (
         break;
 
     default:
-
         break;
     }
 

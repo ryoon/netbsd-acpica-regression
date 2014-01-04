@@ -86,22 +86,12 @@ AcpiNsRepair_CID (
     ACPI_OPERAND_OBJECT     **ReturnObjectPtr);
 
 static ACPI_STATUS
-AcpiNsRepair_CST (
-    ACPI_EVALUATE_INFO      *Info,
-    ACPI_OPERAND_OBJECT     **ReturnObjectPtr);
-
-static ACPI_STATUS
 AcpiNsRepair_FDE (
     ACPI_EVALUATE_INFO      *Info,
     ACPI_OPERAND_OBJECT     **ReturnObjectPtr);
 
 static ACPI_STATUS
 AcpiNsRepair_HID (
-    ACPI_EVALUATE_INFO      *Info,
-    ACPI_OPERAND_OBJECT     **ReturnObjectPtr);
-
-static ACPI_STATUS
-AcpiNsRepair_PRT (
     ACPI_EVALUATE_INFO      *Info,
     ACPI_OPERAND_OBJECT     **ReturnObjectPtr);
 
@@ -119,21 +109,10 @@ static ACPI_STATUS
 AcpiNsCheckSortedList (
     ACPI_EVALUATE_INFO      *Info,
     ACPI_OPERAND_OBJECT     *ReturnObject,
-    UINT32                  StartIndex,
     UINT32                  ExpectedCount,
     UINT32                  SortIndex,
     UINT8                   SortDirection,
     char                    *SortKeyName);
-
-/* Values for SortDirection above */
-
-#define ACPI_SORT_ASCENDING     0
-#define ACPI_SORT_DESCENDING    1
-
-static void
-AcpiNsRemoveElement (
-    ACPI_OPERAND_OBJECT     *ObjDesc,
-    UINT32                  Index);
 
 static void
 AcpiNsSortList (
@@ -141,6 +120,11 @@ AcpiNsSortList (
     UINT32                  Count,
     UINT32                  Index,
     UINT8                   SortDirection);
+
+/* Values for SortDirection above */
+
+#define ACPI_SORT_ASCENDING     0
+#define ACPI_SORT_DESCENDING    1
 
 
 /*
@@ -151,11 +135,9 @@ AcpiNsSortList (
  *
  * _ALR: Sort the list ascending by AmbientIlluminance
  * _CID: Strings: uppercase all, remove any leading asterisk
- * _CST: Sort the list ascending by C state type
  * _FDE: Convert Buffer of BYTEs to a Buffer of DWORDs
  * _GTM: Convert Buffer of BYTEs to a Buffer of DWORDs
  * _HID: Strings: uppercase all, remove any leading asterisk
- * _PRT: Fix reversed SourceName and SourceIndex
  * _PSS: Sort the list descending by Power
  * _TSS: Sort the list descending by Power
  *
@@ -170,11 +152,9 @@ static const ACPI_REPAIR_INFO       AcpiNsRepairableNames[] =
 {
     {"_ALR", AcpiNsRepair_ALR},
     {"_CID", AcpiNsRepair_CID},
-    {"_CST", AcpiNsRepair_CST},
     {"_FDE", AcpiNsRepair_FDE},
     {"_GTM", AcpiNsRepair_FDE},     /* _GTM has same repair as _FDE */
     {"_HID", AcpiNsRepair_HID},
-    {"_PRT", AcpiNsRepair_PRT},
     {"_PSS", AcpiNsRepair_PSS},
     {"_TSS", AcpiNsRepair_TSS},
     {{0,0,0,0}, NULL}               /* Table terminator */
@@ -287,8 +267,8 @@ AcpiNsRepair_ALR (
     ACPI_STATUS             Status;
 
 
-    Status = AcpiNsCheckSortedList (Info, ReturnObject, 0, 2, 1,
-                ACPI_SORT_ASCENDING, __UNCONST("AmbientIlluminance"));
+    Status = AcpiNsCheckSortedList (Info, ReturnObject, 2, 1,
+                ACPI_SORT_ASCENDING, "AmbientIlluminance");
 
     return (Status);
 }
@@ -374,7 +354,6 @@ AcpiNsRepair_FDE (
         break;
 
     default:
-
         return (AE_AML_OPERAND_TYPE);
     }
 
@@ -467,6 +446,7 @@ AcpiNsRepair_CID (
 
 /******************************************************************************
  *
+<<<<<<< HEAD
  * FUNCTION:    AcpiNsRepair_CST
  *
  * PARAMETERS:  Info                - Method execution information block
@@ -558,6 +538,8 @@ AcpiNsRepair_CST (
 
 /******************************************************************************
  *
+=======
+>>>>>>> acpica
  * FUNCTION:    AcpiNsRepair_HID
  *
  * PARAMETERS:  Info                - Method execution information block
@@ -648,7 +630,7 @@ AcpiNsRepair_HID (
 
 /******************************************************************************
  *
- * FUNCTION:    AcpiNsRepair_PRT
+ * FUNCTION:    AcpiNsRepair_TSS
  *
  * PARAMETERS:  Info                - Method execution information block
  *              ReturnObjectPtr     - Pointer to the object returned from the
@@ -656,57 +638,40 @@ AcpiNsRepair_HID (
  *
  * RETURN:      Status. AE_OK if object is OK or was repaired successfully
  *
- * DESCRIPTION: Repair for the _PRT object. If necessary, fix reversed
- *              SourceName and SourceIndex field, a common BIOS bug.
+ * DESCRIPTION: Repair for the _TSS object. If necessary, sort the object list
+ *              descending by the power dissipation values.
  *
  *****************************************************************************/
 
 static ACPI_STATUS
-AcpiNsRepair_PRT (
+AcpiNsRepair_TSS (
     ACPI_EVALUATE_INFO      *Info,
     ACPI_OPERAND_OBJECT     **ReturnObjectPtr)
 {
-    ACPI_OPERAND_OBJECT     *PackageObject = *ReturnObjectPtr;
-    ACPI_OPERAND_OBJECT     **TopObjectList;
-    ACPI_OPERAND_OBJECT     **SubObjectList;
-    ACPI_OPERAND_OBJECT     *ObjDesc;
-    UINT32                  ElementCount;
-    UINT32                  Index;
+    ACPI_OPERAND_OBJECT     *ReturnObject = *ReturnObjectPtr;
+    ACPI_STATUS             Status;
+    ACPI_NAMESPACE_NODE     *Node;
 
 
-    /* Each element in the _PRT package is a subpackage */
-
-    TopObjectList = PackageObject->Package.Elements;
-    ElementCount = PackageObject->Package.Count;
-
-    for (Index = 0; Index < ElementCount; Index++)
+    /*
+     * We can only sort the _TSS return package if there is no _PSS in the
+     * same scope. This is because if _PSS is present, the ACPI specification
+     * dictates that the _TSS Power Dissipation field is to be ignored, and
+     * therefore some BIOSs leave garbage values in the _TSS Power field(s).
+     * In this case, it is best to just return the _TSS package as-is.
+     * (May, 2011)
+     */
+    Status = AcpiNsGetNode (Info->Node, "^_PSS",
+        ACPI_NS_NO_UPSEARCH, &Node);
+    if (ACPI_SUCCESS (Status))
     {
-        SubObjectList = (*TopObjectList)->Package.Elements;
-
-        /*
-         * If the BIOS has erroneously reversed the _PRT SourceName (index 2)
-         * and the SourceIndex (index 3), fix it. _PRT is important enough to
-         * workaround this BIOS error. This also provides compatibility with
-         * other ACPI implementations.
-         */
-        ObjDesc = SubObjectList[3];
-        if (!ObjDesc || (ObjDesc->Common.Type != ACPI_TYPE_INTEGER))
-        {
-            SubObjectList[3] = SubObjectList[2];
-            SubObjectList[2] = ObjDesc;
-            Info->ReturnFlags |= ACPI_OBJECT_REPAIRED;
-
-            ACPI_WARN_PREDEFINED ((AE_INFO, Info->FullPathname, Info->NodeFlags,
-                "PRT[%X]: Fixed reversed SourceName and SourceIndex",
-                Index));
-        }
-
-        /* Point to the next ACPI_OPERAND_OBJECT in the top level package */
-
-        TopObjectList++;
+        return (AE_OK);
     }
 
-    return (AE_OK);
+    Status = AcpiNsCheckSortedList (Info, ReturnObject, 5, 1,
+                ACPI_SORT_DESCENDING, "PowerDissipation");
+
+    return (Status);
 }
 
 
@@ -748,8 +713,13 @@ AcpiNsRepair_PSS (
      * incorrectly sorted, sort it. We sort by CpuFrequency, since this
      * should be proportional to the power.
      */
+<<<<<<< HEAD
     Status =AcpiNsCheckSortedList (Info, ReturnObject, 0, 6, 0,
                 ACPI_SORT_DESCENDING, __UNCONST("CpuFrequency"));
+=======
+    Status =AcpiNsCheckSortedList (Info, ReturnObject, 6, 0,
+                ACPI_SORT_DESCENDING, "CpuFrequency");
+>>>>>>> acpica
     if (ACPI_FAILURE (Status))
     {
         return (Status);
@@ -785,6 +755,7 @@ AcpiNsRepair_PSS (
 
 /******************************************************************************
  *
+<<<<<<< HEAD
  * FUNCTION:    AcpiNsRepair_TSS
  *
  * PARAMETERS:  Info                - Method execution information block
@@ -832,11 +803,12 @@ AcpiNsRepair_TSS (
 
 /******************************************************************************
  *
+=======
+>>>>>>> acpica
  * FUNCTION:    AcpiNsCheckSortedList
  *
  * PARAMETERS:  Info                - Method execution information block
  *              ReturnObject        - Pointer to the top-level returned object
- *              StartIndex          - Index of the first sub-package
  *              ExpectedCount       - Minimum length of each sub-package
  *              SortIndex           - Sub-package entry to sort on
  *              SortDirection       - Ascending or descending
@@ -854,7 +826,6 @@ static ACPI_STATUS
 AcpiNsCheckSortedList (
     ACPI_EVALUATE_INFO      *Info,
     ACPI_OPERAND_OBJECT     *ReturnObject,
-    UINT32                  StartIndex,
     UINT32                  ExpectedCount,
     UINT32                  SortIndex,
     UINT8                   SortDirection,
@@ -883,14 +854,12 @@ AcpiNsCheckSortedList (
      * Any NULL elements should have been removed by earlier call
      * to AcpiNsRemoveNullElements.
      */
+    OuterElements = ReturnObject->Package.Elements;
     OuterElementCount = ReturnObject->Package.Count;
-    if (!OuterElementCount || StartIndex >= OuterElementCount)
+    if (!OuterElementCount)
     {
         return (AE_AML_PACKAGE_LIMIT);
     }
-
-    OuterElements = &ReturnObject->Package.Elements[StartIndex];
-    OuterElementCount -= StartIndex;
 
     PreviousValue = 0;
     if (SortDirection == ACPI_SORT_DESCENDING)
@@ -933,7 +902,7 @@ AcpiNsCheckSortedList (
             ((SortDirection == ACPI_SORT_DESCENDING) &&
                 (ObjDesc->Integer.Value > PreviousValue)))
         {
-            AcpiNsSortList (&ReturnObject->Package.Elements[StartIndex],
+            AcpiNsSortList (ReturnObject->Package.Elements,
                 OuterElementCount, SortIndex, SortDirection);
 
             Info->ReturnFlags |= ACPI_OBJECT_REPAIRED;
@@ -1005,62 +974,4 @@ AcpiNsSortList (
             }
         }
     }
-}
-
-
-/******************************************************************************
- *
- * FUNCTION:    AcpiNsRemoveElement
- *
- * PARAMETERS:  ObjDesc             - Package object element list
- *              Index               - Index of element to remove
- *
- * RETURN:      None
- *
- * DESCRIPTION: Remove the requested element of a package and delete it.
- *
- *****************************************************************************/
-
-static void
-AcpiNsRemoveElement (
-    ACPI_OPERAND_OBJECT     *ObjDesc,
-    UINT32                  Index)
-{
-    ACPI_OPERAND_OBJECT     **Source;
-    ACPI_OPERAND_OBJECT     **Dest;
-    UINT32                  Count;
-    UINT32                  NewCount;
-    UINT32                  i;
-
-
-    ACPI_FUNCTION_NAME (NsRemoveElement);
-
-
-    Count = ObjDesc->Package.Count;
-    NewCount = Count - 1;
-
-    Source = ObjDesc->Package.Elements;
-    Dest = Source;
-
-    /* Examine all elements of the package object, remove matched index */
-
-    for (i = 0; i < Count; i++)
-    {
-        if (i == Index)
-        {
-            AcpiUtRemoveReference (*Source); /* Remove one ref for being in pkg */
-            AcpiUtRemoveReference (*Source);
-        }
-        else
-        {
-            *Dest = *Source;
-            Dest++;
-        }
-        Source++;
-    }
-
-    /* NULL terminate list and update the package count */
-
-    *Dest = NULL;
-    ObjDesc->Package.Count = NewCount;
 }

@@ -54,12 +54,12 @@
 
 #define HI_NO_HISTORY       0
 #define HI_RECORD_HISTORY   1
-#define HISTORY_SIZE        40
+#define HISTORY_SIZE        20
 
 
 typedef struct HistoryInfo
 {
-    char                    *Command;
+    char                    Command[80];
     UINT32                  CmdNum;
 
 } HISTORY_INFO;
@@ -88,35 +88,13 @@ void
 AcpiDbAddToHistory (
     char                    *CommandLine)
 {
-    UINT16                  CmdLen;
-    UINT16                  BufferLen;
 
     /* Put command into the next available slot */
-
-    CmdLen = (UINT16) ACPI_STRLEN (CommandLine);
-    if (AcpiGbl_HistoryBuffer[AcpiGbl_NextHistoryIndex].Command != NULL)
-    {
-        BufferLen = (UINT16) ACPI_STRLEN (
-            AcpiGbl_HistoryBuffer[AcpiGbl_NextHistoryIndex].Command);
-        if (CmdLen > BufferLen)
-        {
-            AcpiOsFree (AcpiGbl_HistoryBuffer[AcpiGbl_NextHistoryIndex].
-                Command);
-            AcpiGbl_HistoryBuffer[AcpiGbl_NextHistoryIndex].Command =
-                AcpiOsAllocate (CmdLen + 1);
-        }
-    }
-    else
-    {
-        AcpiGbl_HistoryBuffer[AcpiGbl_NextHistoryIndex].Command =
-            AcpiOsAllocate (CmdLen + 1);
-    }
 
     ACPI_STRCPY (AcpiGbl_HistoryBuffer[AcpiGbl_NextHistoryIndex].Command,
         CommandLine);
 
-    AcpiGbl_HistoryBuffer[AcpiGbl_NextHistoryIndex].CmdNum =
-        AcpiGbl_NextCmdNum;
+    AcpiGbl_HistoryBuffer[AcpiGbl_NextHistoryIndex].CmdNum = AcpiGbl_NextCmdNum;
 
     /* Adjust indexes */
 
@@ -170,12 +148,8 @@ AcpiDbDisplayHistory (
 
     for (i = 0; i < AcpiGbl_NumHistory; i++)
     {
-        if (AcpiGbl_HistoryBuffer[HistoryIndex].Command)
-        {
-            AcpiOsPrintf ("%3ld  %s\n",
-                AcpiGbl_HistoryBuffer[HistoryIndex].CmdNum,
-                AcpiGbl_HistoryBuffer[HistoryIndex].Command);
-        }
+        AcpiOsPrintf ("%ld  %s\n", AcpiGbl_HistoryBuffer[HistoryIndex].CmdNum,
+                                   AcpiGbl_HistoryBuffer[HistoryIndex].Command);
 
         HistoryIndex++;
         if (HistoryIndex >= HISTORY_SIZE)
@@ -225,7 +199,7 @@ AcpiDbGetFromHistory (
     {
         if (AcpiGbl_HistoryBuffer[HistoryIndex].CmdNum == CmdNum)
         {
-            /* Found the command, return it */
+            /* Found the commnad, return it */
 
             return (AcpiGbl_HistoryBuffer[HistoryIndex].Command);
         }

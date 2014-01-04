@@ -94,9 +94,11 @@ AcpiExResolveObject (
          * These cases all require only Integers or values that
          * can be converted to Integers (Strings or Buffers)
          */
+
     case ACPI_TYPE_INTEGER:
     case ACPI_TYPE_STRING:
     case ACPI_TYPE_BUFFER:
+
         /*
          * Stores into a Field/Region or into a Integer/Buffer/String
          * are all essentially the same. This case handles the
@@ -138,8 +140,10 @@ AcpiExResolveObject (
         }
         break;
 
+
     case ACPI_TYPE_LOCAL_ALIAS:
     case ACPI_TYPE_LOCAL_METHOD_ALIAS:
+
         /*
          * All aliases should have been resolved earlier, during the
          * operand resolution phase.
@@ -148,8 +152,10 @@ AcpiExResolveObject (
         Status = AE_AML_INTERNAL;
         break;
 
+
     case ACPI_TYPE_PACKAGE:
     default:
+
         /*
          * All other types than Alias and the various Fields come here,
          * including the untyped case - ACPI_TYPE_ANY.

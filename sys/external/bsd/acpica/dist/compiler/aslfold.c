@@ -441,6 +441,7 @@ OpcAmlConstantWalk (
                 ACPI_FORMAT_UINT64 (Op->Common.Value.Integer));
             break;
 
+
         case ACPI_TYPE_STRING:
 
             Op->Asl.ParseOpcode = PARSEOP_STRING_LITERAL;
@@ -453,6 +454,7 @@ OpcAmlConstantWalk (
                 Op->Common.Value.String);
 
             break;
+
 
         case ACPI_TYPE_BUFFER:
 
@@ -491,8 +493,8 @@ OpcAmlConstantWalk (
                 ObjDesc->Buffer.Length);
             break;
 
-        default:
 
+        default:
             printf ("Unsupported return type: %s\n",
                 AcpiUtGetObjectTypeName (ObjDesc));
             break;
@@ -534,32 +536,27 @@ OpcUpdateIntegerNode (
     switch (Op->Asl.AmlLength)
     {
     case 1:
-
         TrUpdateNode (PARSEOP_BYTECONST, Op);
         Op->Asl.AmlOpcode = AML_RAW_DATA_BYTE;
         break;
 
     case 2:
-
         TrUpdateNode (PARSEOP_WORDCONST, Op);
         Op->Asl.AmlOpcode = AML_RAW_DATA_WORD;
         break;
 
     case 4:
-
         TrUpdateNode (PARSEOP_DWORDCONST, Op);
         Op->Asl.AmlOpcode = AML_RAW_DATA_DWORD;
         break;
 
     case 8:
-
         TrUpdateNode (PARSEOP_QWORDCONST, Op);
         Op->Asl.AmlOpcode = AML_RAW_DATA_QWORD;
         break;
 
     case 0:
     default:
-
         OpcSetOptimalIntegerSize (Op);
         TrUpdateNode (PARSEOP_INTEGER, Op);
         break;

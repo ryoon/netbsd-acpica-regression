@@ -127,22 +127,18 @@ DtDoOperator (
     switch (Operator)
     {
     case EXPOP_ONES_COMPLIMENT:
-
         Result = ~RightValue;
         break;
 
     case EXPOP_LOGICAL_NOT:
-
         Result = !RightValue;
         break;
 
     case EXPOP_MULTIPLY:
-
         Result = LeftValue * RightValue;
         break;
 
     case EXPOP_DIVIDE:
-
         if (!RightValue)
         {
             DtError (ASL_ERROR, ASL_MSG_DIVIDE_BY_ZERO,
@@ -153,7 +149,6 @@ DtDoOperator (
         break;
 
     case EXPOP_MODULO:
-
         if (!RightValue)
         {
             DtError (ASL_ERROR, ASL_MSG_DIVIDE_BY_ZERO,
@@ -168,72 +163,58 @@ DtDoOperator (
         break;
 
     case EXPOP_SUBTRACT:
-
         Result = LeftValue - RightValue;
         break;
 
     case EXPOP_SHIFT_RIGHT:
-
         Result = LeftValue >> RightValue;
         break;
 
     case EXPOP_SHIFT_LEFT:
-
         Result = LeftValue << RightValue;
         break;
 
     case EXPOP_LESS:
-
         Result = LeftValue < RightValue;
         break;
 
     case EXPOP_GREATER:
-
         Result = LeftValue > RightValue;
         break;
 
     case EXPOP_LESS_EQUAL:
-
         Result = LeftValue <= RightValue;
         break;
 
     case EXPOP_GREATER_EQUAL:
-
         Result = LeftValue >= RightValue;
         break;
 
     case EXPOP_EQUAL:
-
         Result = LeftValue == RightValue;
         break;
 
     case EXPOP_NOT_EQUAL:
-
         Result = LeftValue != RightValue;
         break;
 
     case EXPOP_AND:
-
         Result = LeftValue & RightValue;
         break;
 
     case EXPOP_XOR:
-
         Result = LeftValue ^ RightValue;
         break;
 
     case EXPOP_OR:
-
         Result = LeftValue | RightValue;
         break;
 
     case EXPOP_LOGICAL_AND:
-
         Result = LeftValue && RightValue;
         break;
 
     case EXPOP_LOGICAL_OR:
-
         Result = LeftValue || RightValue;
         break;
 

@@ -452,7 +452,6 @@ AcpiResourceToAddress64 (
         break;
 
     default:
-
         return (AE_BAD_PARAMETER);
     }
 

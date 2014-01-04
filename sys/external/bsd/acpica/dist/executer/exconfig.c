@@ -483,6 +483,7 @@ AcpiExLoadOp (
         TableDesc.Address = ObjDesc->Region.Address;
         break;
 
+
     case ACPI_TYPE_BUFFER: /* Buffer or resolved RegionField */
 
         ACPI_DEBUG_PRINT ((ACPI_DB_EXEC,
@@ -525,8 +526,8 @@ AcpiExLoadOp (
         TableDesc.Address = ACPI_TO_INTEGER (TableDesc.Pointer);
         break;
 
-    default:
 
+    default:
         return_ACPI_STATUS (AE_AML_OPERAND_TYPE);
     }
 

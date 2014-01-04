@@ -376,17 +376,14 @@ AcpiDmGpioDescriptor (
     switch (ConnectionType)
     {
     case AML_RESOURCE_GPIO_TYPE_INT:
-
         AcpiDmGpioIntDescriptor (Resource, Length, Level);
         break;
 
     case AML_RESOURCE_GPIO_TYPE_IO:
-
         AcpiDmGpioIoDescriptor (Resource, Length, Level);
         break;
 
     default:
-
         AcpiOsPrintf ("Unknown GPIO type\n");
         break;
     }
@@ -446,7 +443,6 @@ AcpiDmDumpSerialBusVendorData (
         break;
 
     default:
-
         return;
     }
 

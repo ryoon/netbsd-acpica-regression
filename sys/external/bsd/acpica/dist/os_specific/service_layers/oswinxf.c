@@ -74,7 +74,7 @@ char                        TableName[ACPI_NAME_SIZE + 1];
 #define ACPI_OS_DEBUG_TIMEOUT   30000 /* 30 seconds */
 
 
-/* Upcalls to AcpiExec application */
+/* Upcalls to application */
 
 ACPI_PHYSICAL_ADDRESS
 AeLocalGetRootPointer (
@@ -84,6 +84,11 @@ void
 AeTableOverride (
     ACPI_TABLE_HEADER       *ExistingTable,
     ACPI_TABLE_HEADER       **NewTable);
+
+ACPI_TABLE_HEADER *
+OsGetTable (
+    char                    *Signature);
+
 
 /*
  * Real semaphores are only used for a multi-threaded application
@@ -240,10 +245,6 @@ AcpiOsTableOverride (
     ACPI_TABLE_HEADER       *ExistingTable,
     ACPI_TABLE_HEADER       **NewTable)
 {
-#ifdef ACPI_ASL_COMPILER
-    ACPI_STATUS             Status;
-    ACPI_PHYSICAL_ADDRESS   Address;
-#endif
 
     if (!ExistingTable || !NewTable)
     {
@@ -270,16 +271,15 @@ AcpiOsTableOverride (
     ACPI_MOVE_NAME (TableName, ExistingTable->Signature);
     TableName[ACPI_NAME_SIZE] = 0;
 
-    Status = AcpiOsGetTableByName (TableName, 0, NewTable, &Address);
-    if (ACPI_SUCCESS (Status))
+    *NewTable = OsGetTable (TableName);
+    if (*NewTable)
     {
         AcpiOsPrintf ("Table [%s] obtained from registry, %u bytes\n",
             TableName, (*NewTable)->Length);
     }
     else
     {
-        AcpiOsPrintf ("Could not read table %s from registry (%s)\n",
-            TableName, AcpiFormatException (Status));
+        AcpiOsPrintf ("Could not read table %s from registry\n", TableName);
     }
 #endif
 
@@ -1224,22 +1224,18 @@ AcpiOsReadPort (
     switch (Width)
     {
     case 8:
-
         *Value = 0xFF;
         break;
 
     case 16:
-
         *Value = 0xFFFF;
         break;
 
     case 32:
-
         *Value = 0xFFFFFFFF;
         break;
 
     default:
-
         ACPI_ERROR ((AE_INFO, "Bad width parameter: %X", Width));
         return (AE_BAD_PARAMETER);
     }
@@ -1309,12 +1305,10 @@ AcpiOsReadMemory (
     case 16:
     case 32:
     case 64:
-
         *Value = 0;
         break;
 
     default:
-
         return (AE_BAD_PARAMETER);
         break;
     }
@@ -1370,15 +1364,12 @@ AcpiOsSignal (
     switch (Function)
     {
     case ACPI_SIGNAL_FATAL:
-
         break;
 
     case ACPI_SIGNAL_BREAKPOINT:
-
         break;
 
     default:
-
         break;
     }
 

@@ -617,6 +617,7 @@ RsDoGpioIoDescriptor (
             break;
 
         case 9: /* Vendor Data (Optional - Buffer of BYTEs) (_VEN) */
+
             /*
              * Always set the VendorOffset even if there is no Vendor Data.
              * This field is required in order to calculate the length
@@ -811,7 +812,6 @@ RsDoI2cSerialBusDescriptor (
             break;
 
         default:    /* Ignore any extra nodes */
-
             break;
         }
 
@@ -986,7 +986,6 @@ RsDoSpiSerialBusDescriptor (
             break;
 
         default:    /* Ignore any extra nodes */
-
             break;
         }
 
@@ -1178,7 +1177,6 @@ RsDoUartSerialBusDescriptor (
             break;
 
         default:    /* Ignore any extra nodes */
-
             break;
         }
 

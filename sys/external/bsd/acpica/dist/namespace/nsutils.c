@@ -497,12 +497,10 @@ AcpiNsExternalizeName (
     switch (InternalName[0])
     {
     case AML_ROOT_PREFIX:
-
         PrefixLength = 1;
         break;
 
     case AML_PARENT_PREFIX:
-
         for (i = 0; i < InternalNameLength; i++)
         {
             if (ACPI_IS_PARENT_PREFIX (InternalName[i]))
@@ -523,7 +521,6 @@ AcpiNsExternalizeName (
         break;
 
     default:
-
         break;
     }
 

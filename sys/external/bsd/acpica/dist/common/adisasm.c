@@ -628,12 +628,10 @@ AdCreateTableHeader (
     switch (Table->Revision)
     {
     case 0:
-
         AcpiOsPrintf (" **** Invalid Revision");
         break;
 
     case 1:
-
         /* Revision of DSDT controls the ACPI integer width */
 
         if (ACPI_COMPARE_NAME (Table->Signature, ACPI_SIG_DSDT))
@@ -643,7 +641,6 @@ AdCreateTableHeader (
         break;
 
     default:
-
         break;
     }
     AcpiOsPrintf ("\n");

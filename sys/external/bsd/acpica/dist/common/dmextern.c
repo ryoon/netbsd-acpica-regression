@@ -594,7 +594,6 @@ AcpiDmAddExternalsToNamespace (
             break;
 
         default:
-
             break;
         }
 
