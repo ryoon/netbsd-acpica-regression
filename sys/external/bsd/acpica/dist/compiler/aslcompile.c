@@ -966,19 +966,7 @@ CmCleanupAndExit (
 
     /* Close all open files */
 
-    /*
-     * Take care with the preprocessor file (.i), it might be the same
-     * as the "input" file, depending on where the compiler has terminated
-     * or aborted. Prevent attempt to close the same file twice in
-     * loop below.
-     */
-    if (Gbl_Files[ASL_FILE_PREPROCESSOR].Handle ==
-        Gbl_Files[ASL_FILE_INPUT].Handle)
-    {
-        Gbl_Files[ASL_FILE_PREPROCESSOR].Handle = NULL;
-    }
-
-    /* Close the standard I/O files */
+    Gbl_Files[ASL_FILE_PREPROCESSOR].Handle = NULL; /* the .i file is same as source file */
 
     for (i = ASL_FILE_INPUT; i < ASL_MAX_FILE_TYPE; i++)
     {

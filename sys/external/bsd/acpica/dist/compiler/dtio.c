@@ -287,21 +287,31 @@ DtParseLine (
 
     while (Start < Colon)
     {
+        if (*Start == ' ')
+        {
+            Start++;
+            continue;
+        }
+
+        /* Found left bracket, go to the right bracket */
+
         if (*Start == '[')
         {
-            /* Found left bracket, go to the right bracket */
-
             while (Start < Colon && *Start != ']')
             {
                 Start++;
             }
-        }
-        else if (*Start != ' ')
-        {
-            break;
+
+            if (Start == Colon)
+            {
+                break;
+            }
+
+            Start++;
+            continue;
         }
 
-        Start++;
+        break;
     }
 
     /*
@@ -1128,5 +1138,4 @@ DtWriteTableToListing (
     AcpiUtDumpBuffer (Buffer, Gbl_TableLength, DB_BYTE_DISPLAY, 0);
 
     AcpiOsRedirectOutput (stdout);
-    ACPI_FREE (Buffer);
 }

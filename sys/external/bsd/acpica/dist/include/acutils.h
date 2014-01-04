@@ -903,7 +903,7 @@ AcpiUtStrtoul64 (
 void
 AcpiUtPrintString (
     char                    *String,
-    UINT16                  MaxLength);
+    UINT8                   MaxLength);
 
 void
 UtConvertBackslashes (
