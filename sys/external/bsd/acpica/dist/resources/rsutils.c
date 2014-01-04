@@ -827,7 +827,7 @@ AcpiRsSetSrsMethodData (
      * Convert the linked list into a byte stream
      */
     Buffer.Length = ACPI_ALLOCATE_LOCAL_BUFFER;
-    Status = AcpiRsCreateAmlResources (InBuffer, &Buffer);
+    Status = AcpiRsCreateAmlResources (InBuffer->Pointer, &Buffer);
     if (ACPI_FAILURE (Status))
     {
         goto Cleanup;
