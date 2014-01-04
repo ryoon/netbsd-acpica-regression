@@ -172,6 +172,7 @@ file	external/bsd/acpica/dist/utilities/utcopy.c		acpica
 file	external/bsd/acpica/dist/utilities/utdebug.c		acpica
 file	external/bsd/acpica/dist/utilities/utdecode.c		acpica
 file	external/bsd/acpica/dist/utilities/utdelete.c		acpica
+file	external/bsd/acpica/dist/utilities/uterror.c		acpica
 file	external/bsd/acpica/dist/utilities/uteval.c		acpica
 file	external/bsd/acpica/dist/utilities/utexcep.c		acpica
 file	external/bsd/acpica/dist/utilities/utglobal.c		acpica
