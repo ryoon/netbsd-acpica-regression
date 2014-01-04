@@ -452,16 +452,6 @@ typedef struct acpi_simple_repair_info
  *
  ****************************************************************************/
 
-/* Dispatch info for each host-installed SCI handler */
-
-typedef struct acpi_sci_handler_info
-{
-    struct acpi_sci_handler_info    *Next;
-    ACPI_SCI_HANDLER                Address;        /* Address of handler */
-    void                            *Context;       /* Context to be passed to handler */
-
-} ACPI_SCI_HANDLER_INFO;
-
 /* Dispatch info for each GPE -- either a method or handler, cannot be both */
 
 typedef struct acpi_gpe_handler_info
@@ -1226,8 +1216,7 @@ typedef struct acpi_external_list
 
 /* Values for Flags field above */
 
-#define ACPI_IPATH_ALLOCATED        0x01
-#define ACPI_FROM_REFERENCE_FILE    0x02
+#define ACPI_IPATH_ALLOCATED    0x01
 
 
 typedef struct acpi_external_file

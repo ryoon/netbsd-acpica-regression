@@ -41,7 +41,6 @@
  * POSSIBILITY OF SUCH DAMAGES.
  */
 
-#include <acpi.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,6 +49,8 @@
 #include <fnmatch.h>
 #include <ctype.h>
 #include <sys/stat.h>
+
+#include "acpisrc.h"
 
 /*
  * Allocated structure returned from OsOpenDirectory
@@ -102,7 +103,6 @@ AcpiOsOpenDirectory (
     dir = opendir (DirPathname);
     if (!dir)
     {
-        fprintf (stderr, "Cannot open directory - %s\n", DirPathname);
         free (ExternalInfo);
         return (NULL);
     }
@@ -157,8 +157,7 @@ AcpiOsGetNextFilename (
             temp_str = calloc (str_len, 1);
             if (!temp_str)
             {
-                fprintf (stderr,
-                    "Could not allocate buffer for temporary string\n");
+                printf ("Could not allocate buffer for temporary string\n");
                 return (NULL);
             }
 
@@ -170,9 +169,7 @@ AcpiOsGetNextFilename (
             free (temp_str);
             if (err == -1)
             {
-                fprintf (stderr,
-                    "Cannot stat file (should not happen) - %s\n",
-                    temp_str);
+                printf ("stat() error - should not happen\n");
                 return (NULL);
             }
 

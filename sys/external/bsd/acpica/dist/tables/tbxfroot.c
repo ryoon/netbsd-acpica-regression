@@ -75,7 +75,8 @@ AcpiTbValidateRsdp (
      * Note: Sometimes there exists more than one RSDP in memory; the valid
      * RSDP has a valid checksum, all others have an invalid checksum.
      */
-    if (!ACPI_VALIDATE_RSDP_SIG (Rsdp->Signature))
+    if (ACPI_STRNCMP ((char *) Rsdp->Signature, ACPI_SIG_RSDP,
+            sizeof (ACPI_SIG_RSDP)-1) != 0)
     {
         /* Nope, BAD Signature */
 

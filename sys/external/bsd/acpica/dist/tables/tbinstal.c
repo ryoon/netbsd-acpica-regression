@@ -93,9 +93,14 @@ AcpiTbVerifyTable (
         }
     }
 
-    /* Always calculate checksum, ignore bad checksum if requested */
+    /* FACS is the odd table, has no standard ACPI header and no checksum */
 
-    Status = AcpiTbVerifyChecksum (TableDesc->Pointer, TableDesc->Length);
+    if (!ACPI_COMPARE_NAME (&TableDesc->Signature, ACPI_SIG_FACS))
+    {
+        /* Always calculate checksum, ignore bad checksum if requested */
+
+        Status = AcpiTbVerifyChecksum (TableDesc->Pointer, TableDesc->Length);
+    }
 
     return_ACPI_STATUS (Status);
 }

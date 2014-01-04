@@ -1211,14 +1211,6 @@ AcpiDbGenerateGpe (
 
     (void) AcpiEvGpeDispatch (NULL, GpeEventInfo, GpeNumber);
 }
-
-void
-AcpiDbGenerateSci (
-    void)
-{
-    AcpiEvSciDispatch ();
-}
-
 #endif /* !ACPI_REDUCED_HARDWARE */
 
 #endif /* ACPI_DEBUGGER */

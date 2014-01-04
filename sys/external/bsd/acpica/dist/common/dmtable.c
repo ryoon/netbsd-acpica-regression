@@ -446,7 +446,7 @@ AcpiDmDumpDataTable (
         Length = Table->Length;
         AcpiDmDumpTable (Length, 0, Table, 0, AcpiDmTableInfoFacs);
     }
-    else if (ACPI_VALIDATE_RSDP_SIG (Table->Signature))
+    else if (ACPI_COMPARE_NAME (Table->Signature, ACPI_SIG_RSDP))
     {
         Length = AcpiDmDumpRsdp (Table);
     }

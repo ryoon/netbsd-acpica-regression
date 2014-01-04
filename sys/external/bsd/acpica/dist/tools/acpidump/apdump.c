@@ -49,7 +49,6 @@
 static int
 ApDumpTableBuffer (
     ACPI_TABLE_HEADER       *Table,
-    UINT32                  Instance,
     ACPI_PHYSICAL_ADDRESS   Address);
 
 
@@ -69,25 +68,23 @@ BOOLEAN
 ApIsValidHeader (
     ACPI_TABLE_HEADER       *Table)
 {
-    if (!ACPI_VALIDATE_RSDP_SIG (Table->Signature))
+
+    /* Make sure signature is all ASCII and a valid ACPI name */
+
+    if (!AcpiUtValidAcpiName (Table->Signature))
     {
-        /* Make sure signature is all ASCII and a valid ACPI name */
+        fprintf (stderr, "Table signature (0x%8.8X) is invalid\n",
+            *(UINT32 *) Table->Signature);
+        return (FALSE);
+    }
 
-        if (!AcpiUtValidAcpiName (Table->Signature))
-        {
-            fprintf (stderr, "Table signature (0x%8.8X) is invalid\n",
-                *(UINT32 *) Table->Signature);
-            return (FALSE);
-        }
+    /* Check for minimum table length */
 
-        /* Check for minimum table length */
-
-        if (Table->Length <= sizeof (ACPI_TABLE_HEADER))
-        {
-            fprintf (stderr, "Table length (0x%8.8X) is invalid\n",
-                Table->Length);
-            return (FALSE);
-        }
+    if (Table->Length <= sizeof (ACPI_TABLE_HEADER))
+    {
+        fprintf (stderr, "Table length (0x%8.8X) is invalid\n",
+            Table->Length);
+        return (FALSE);
     }
 
     return (TRUE);
@@ -96,93 +93,9 @@ ApIsValidHeader (
 
 /******************************************************************************
  *
- * FUNCTION:    ApIsValidChecksum
- *
- * PARAMETERS:  Table               - Pointer to table to be validated
- *
- * RETURN:      TRUE if the checksum appears to be valid. FALSE otherwise
- *
- * DESCRIPTION: Check for a valid ACPI table checksum
- *
- ******************************************************************************/
-
-BOOLEAN
-ApIsValidChecksum (
-    ACPI_TABLE_HEADER       *Table)
-{
-    ACPI_STATUS             Status;
-    ACPI_TABLE_RSDP         *Rsdp;
-
-
-    if (ACPI_VALIDATE_RSDP_SIG (Table->Signature))
-    {
-        /*
-         * Checksum for RSDP.
-         * Note: Other checksums are computed during the table dump.
-         */
-
-        Rsdp = ACPI_CAST_PTR (ACPI_TABLE_RSDP, Table);
-        Status = AcpiTbValidateRsdp (Rsdp);
-    }
-    else
-    {
-        Status = AcpiTbVerifyChecksum (Table, Table->Length);
-    }
-
-    if (ACPI_FAILURE (Status))
-    {
-        fprintf (stderr, "%4.4s: Warning: wrong checksum\n",
-            Table->Signature);
-    }
-
-    return (AE_OK);
-}
-
-
-/******************************************************************************
- *
- * FUNCTION:    ApGetTableLength
- *
- * PARAMETERS:  Table               - Pointer to the table
- *
- * RETURN:      Table length
- *
- * DESCRIPTION: Obtain table length according to table signature
- *
- ******************************************************************************/
-
-UINT32
-ApGetTableLength (
-    ACPI_TABLE_HEADER       *Table)
-{
-    ACPI_TABLE_RSDP         *Rsdp;
-
-
-    /* Check if table is valid */
-
-    if (!ApIsValidHeader (Table))
-    {
-        return (0);
-    }
-
-    if (ACPI_VALIDATE_RSDP_SIG (Table->Signature))
-    {
-        Rsdp = ACPI_CAST_PTR (ACPI_TABLE_RSDP, Table);
-        return (Rsdp->Length);
-    }
-    else
-    {
-        return (Table->Length);
-    }
-}
-
-
-/******************************************************************************
- *
  * FUNCTION:    ApDumpTableBuffer
  *
  * PARAMETERS:  Table               - ACPI table to be dumped
- *              Instance            - ACPI table instance no. to be dumped
  *              Address             - Physical address of the table
  *
  * RETURN:      None
@@ -195,13 +108,22 @@ ApGetTableLength (
 static int
 ApDumpTableBuffer (
     ACPI_TABLE_HEADER       *Table,
-    UINT32                  Instance,
     ACPI_PHYSICAL_ADDRESS   Address)
 {
-    UINT32                  TableLength;
 
+    /* Check if the table header appears to be valid */
 
-    TableLength = ApGetTableLength (Table);
+    if (!ApIsValidHeader (Table))
+    {
+        return (-1);
+    }
+
+     /* Validate the table checksum (except FACS - has no checksum) */
+
+    if (!ACPI_COMPARE_NAME (Table->Signature, ACPI_SIG_FACS))
+    {
+        (void) AcpiTbVerifyChecksum (Table, Table->Length);
+    }
 
     /* Print only the header if requested */
 
@@ -215,7 +137,7 @@ ApDumpTableBuffer (
 
     if (Gbl_BinaryMode)
     {
-        return (ApWriteToBinaryFile (Table, Instance));
+        return (ApWriteToBinaryFile (Table));
     }
 
     /*
@@ -226,7 +148,7 @@ ApDumpTableBuffer (
     printf ("%4.4s @ 0x%8.8X%8.8X\n", Table->Signature,
         ACPI_FORMAT_UINT64 (Address));
 
-    AcpiUtDumpBuffer (ACPI_CAST_PTR (UINT8, Table), TableLength,
+    AcpiUtDumpBuffer (ACPI_CAST_PTR (UINT8, Table), Table->Length,
         DB_BYTE_DISPLAY, 0);
     printf ("\n");
     return (0);
@@ -251,7 +173,6 @@ ApDumpAllTables (
     void)
 {
     ACPI_TABLE_HEADER       *Table;
-    UINT32                  Instance = 0;
     ACPI_PHYSICAL_ADDRESS   Address;
     ACPI_STATUS             Status;
     UINT32                  i;
@@ -261,7 +182,7 @@ ApDumpAllTables (
 
     for (i = 0; i < AP_MAX_ACPI_FILES; i++)
     {
-        Status = AcpiOsGetTableByIndex (i, &Table, &Instance, &Address);
+        Status = AcpiOsGetTableByIndex (i, &Table, &Address);
         if (ACPI_FAILURE (Status))
         {
             /* AE_LIMIT means that no more tables are available */
@@ -284,7 +205,7 @@ ApDumpAllTables (
             }
         }
 
-        if (ApDumpTableBuffer (Table, Instance, Address))
+        if (ApDumpTableBuffer (Table, Address))
         {
             return (-1);
         }
@@ -340,7 +261,7 @@ ApDumpTableByAddress (
         return (-1);
     }
 
-    TableStatus = ApDumpTableBuffer (Table, 0, Address);
+    TableStatus = ApDumpTableBuffer (Table, Address);
     free (Table);
     return (TableStatus);
 }
@@ -385,11 +306,7 @@ ApDumpTableByName (
 
     /* To be friendly, handle tables whose signatures do not match the name */
 
-    if (ACPI_COMPARE_NAME (LocalSignature, AP_DUMP_SIG_RSDP))
-    {
-        strcpy (LocalSignature, AP_DUMP_SIG_RSDP);
-    }
-    else if (ACPI_COMPARE_NAME (LocalSignature, "FADT"))
+    if (ACPI_COMPARE_NAME (LocalSignature, "FADT"))
     {
         strcpy (LocalSignature, ACPI_SIG_FADT);
     }
@@ -419,7 +336,7 @@ ApDumpTableByName (
             return (-1);
         }
 
-        if (ApDumpTableBuffer (Table, Instance, Address))
+        if (ApDumpTableBuffer (Table, Address))
         {
             return (-1);
         }
@@ -478,7 +395,7 @@ ApDumpTableFromFile (
             Pathname, Table->Signature, FileSize, FileSize);
     }
 
-    TableStatus = ApDumpTableBuffer (Table, 0, 0);
+    TableStatus = ApDumpTableBuffer (Table, 0);
     free (Table);
     return (TableStatus);
 }

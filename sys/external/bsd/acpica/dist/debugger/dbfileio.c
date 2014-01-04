@@ -142,8 +142,7 @@ AcpiDbOpenDebugFile (
     }
 
     AcpiOsPrintf ("Debug output file %s opened\n", Name);
-    ACPI_STRNCPY (AcpiGbl_DbDebugFilename, Name,
-        sizeof (AcpiGbl_DbDebugFilename));
+    ACPI_STRCPY (AcpiGbl_DbDebugFilename, Name);
     AcpiGbl_DbOutputToFile = TRUE;
 
 #endif
@@ -275,9 +274,11 @@ AcpiDbReadTable (
 
     fseek (fp, 0, SEEK_SET);
 
-    /* The RSDP table does not have standard ACPI header */
+    /* The RSDT, FACS and S3PT tables do not have standard ACPI headers */
 
-    if (ACPI_COMPARE_NAME (TableHeader.Signature, "RSD "))
+    if (ACPI_COMPARE_NAME (TableHeader.Signature, "RSD ") ||
+        ACPI_COMPARE_NAME (TableHeader.Signature, "FACS") ||
+        ACPI_COMPARE_NAME (TableHeader.Signature, "S3PT"))
     {
         *TableLength = FileSize;
         StandardHeader = FALSE;

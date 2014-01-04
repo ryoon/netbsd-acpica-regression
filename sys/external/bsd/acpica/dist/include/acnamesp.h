@@ -272,14 +272,6 @@ AcpiNsDumpObjects (
     ACPI_OWNER_ID           OwnerId,
     ACPI_HANDLE             StartHandle);
 
-void
-AcpiNsDumpObjectPaths (
-    ACPI_OBJECT_TYPE        Type,
-    UINT8                   DisplayType,
-    UINT32                  MaxDepth,
-    ACPI_OWNER_ID           OwnerId,
-    ACPI_HANDLE             StartHandle);
-
 
 /*
  * nseval - Namespace evaluation functions

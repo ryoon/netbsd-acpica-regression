@@ -67,10 +67,9 @@
 EXTERN BOOLEAN              INIT_GLOBAL (Gbl_SummaryMode, FALSE);
 EXTERN BOOLEAN              INIT_GLOBAL (Gbl_VerboseMode, FALSE);
 EXTERN BOOLEAN              INIT_GLOBAL (Gbl_BinaryMode, FALSE);
-EXTERN BOOLEAN              INIT_GLOBAL (Gbl_DumpCustomizedTables, FALSE);
+EXTERN UINT32               INIT_GLOBAL (Gbl_SsdtCount, 0);
 EXTERN FILE                 INIT_GLOBAL (*Gbl_OutputFile, NULL);
 EXTERN char                 INIT_GLOBAL (*Gbl_OutputFilename, NULL);
-EXTERN UINT64               INIT_GLOBAL (Gbl_RsdpBase, 0);
 
 /* Globals required for use with ACPICA modules */
 
@@ -89,10 +88,6 @@ typedef struct ap_dump_action
     UINT32                  ToBeDone;
 
 } AP_DUMP_ACTION;
-
-/* Local RSDP signature (Not the same as the actual signature which is "RSD PTR ") */
-
-#define AP_DUMP_SIG_RSDP            "RSDP"
 
 #define AP_MAX_ACTIONS              32
 
@@ -134,14 +129,6 @@ BOOLEAN
 ApIsValidHeader (
     ACPI_TABLE_HEADER       *Table);
 
-BOOLEAN
-ApIsValidChecksum (
-    ACPI_TABLE_HEADER       *Table);
-
-UINT32
-ApGetTableLength (
-    ACPI_TABLE_HEADER       *Table);
-
 
 /*
  * apfiles - File I/O utilities
@@ -156,8 +143,7 @@ ApOpenOutputFile (
 
 int
 ApWriteToBinaryFile (
-    ACPI_TABLE_HEADER       *Table,
-    UINT32                  Instance);
+    ACPI_TABLE_HEADER       *Table);
 
 ACPI_TABLE_HEADER *
 ApGetTableFromFile (

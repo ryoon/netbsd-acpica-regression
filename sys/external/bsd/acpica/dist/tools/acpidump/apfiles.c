@@ -100,7 +100,6 @@ ApOpenOutputFile (
  * FUNCTION:    ApWriteToBinaryFile
  *
  * PARAMETERS:  Table               - ACPI table to be written
- *              Instance            - ACPI table instance no. to be written
  *
  * RETURN:      Status
  *
@@ -111,42 +110,29 @@ ApOpenOutputFile (
 
 int
 ApWriteToBinaryFile (
-    ACPI_TABLE_HEADER       *Table,
-    UINT32                  Instance)
+    ACPI_TABLE_HEADER       *Table)
 {
     char                    Filename[ACPI_NAME_SIZE + 16];
-    char                    InstanceStr [16];
+    char                    SsdtInstance [16];
     FILE                    *File;
     size_t                  Actual;
-    UINT32                  TableLength;
 
 
-    /* Obtain table length */
+    /* Construct lower-case filename from the table signature */
 
-    TableLength = ApGetTableLength (Table);
-
-    /* Construct lower-case filename from the table local signature */
-
-    if (ACPI_VALIDATE_RSDP_SIG (Table->Signature))
-    {
-        ACPI_MOVE_NAME (Filename, AP_DUMP_SIG_RSDP);
-    }
-    else
-    {
-        ACPI_MOVE_NAME (Filename, Table->Signature);
-    }
-    Filename[0] = (char) ACPI_TOLOWER (Filename[0]);
-    Filename[1] = (char) ACPI_TOLOWER (Filename[1]);
-    Filename[2] = (char) ACPI_TOLOWER (Filename[2]);
-    Filename[3] = (char) ACPI_TOLOWER (Filename[3]);
+    Filename[0] = (char) ACPI_TOLOWER (Table->Signature[0]);
+    Filename[1] = (char) ACPI_TOLOWER (Table->Signature[1]);
+    Filename[2] = (char) ACPI_TOLOWER (Table->Signature[2]);
+    Filename[3] = (char) ACPI_TOLOWER (Table->Signature[3]);
     Filename[ACPI_NAME_SIZE] = 0;
 
     /* Handle multiple SSDTs - create different filenames for each */
 
-    if (Instance > 0)
+    if (ACPI_COMPARE_NAME (Table->Signature, ACPI_SIG_SSDT))
     {
-        sprintf (InstanceStr, "%u", Instance);
-        strcat (Filename, InstanceStr);
+        sprintf (SsdtInstance, "%u", Gbl_SsdtCount);
+        strcat (Filename, SsdtInstance);
+        Gbl_SsdtCount++;
     }
 
     strcat (Filename, ACPI_TABLE_FILE_SUFFIX);
@@ -167,8 +153,8 @@ ApWriteToBinaryFile (
         return (-1);
     }
 
-    Actual = fwrite (Table, 1, TableLength, File);
-    if (Actual != TableLength)
+    Actual = fwrite (Table, 1, Table->Length, File);
+    if (Actual != Table->Length)
     {
         perror ("Error writing binary output file");
         fclose (File);
