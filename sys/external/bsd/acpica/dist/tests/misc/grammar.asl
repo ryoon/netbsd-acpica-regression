@@ -242,7 +242,7 @@ DefinitionBlock (
             }
         })
 
-        Method (_CRS, 0, Serialized)
+        Method (_CRS, 0, NotSerialized)
         {
             Name (PRT0, ResourceTemplate ()
             {
@@ -401,7 +401,7 @@ DefinitionBlock (
             Return (PRT0)
         }
 
-        Method (_PRS, 0, Serialized)
+        Method (_PRS, 0, NotSerialized)
         {
             Name (BUF0, ResourceTemplate ()
             {
@@ -508,7 +508,7 @@ DefinitionBlock (
         MFLD,8
     }
 
-    Method (TCOP,, Serialized)
+    Method (TCOP)
     {
         Name (_STR, Unicode ("test"))
         Store (4, MFLD)
@@ -707,7 +707,7 @@ DefinitionBlock (
             Name(_HID,EISAID("PNP0A03"))
             Name(_ADR,0x0)
 
-            Method(_CRS,, Serialized)
+            Method(_CRS)
             {
                 Name(PRT0, ResourceTemplate() {
                     WORDBusNumber(                          // Bus number resource(0)
@@ -870,7 +870,7 @@ DefinitionBlock (
                 Return(RBIF)
             }
 
-            Method(_BST,, Serialized) {
+            Method(_BST) {
 
                 _INI()
 
@@ -1310,7 +1310,7 @@ DefinitionBlock (
      * Field Creation
      */
 
-    Method (FLDS,, Serialized)
+    Method (FLDS)
     {
         Store ("++++++++ Creating BufferFields", Debug)
         Name (BUF2, Buffer (128) {})
@@ -1401,7 +1401,7 @@ DefinitionBlock (
 
     /* Field execution */
 
-    Method (FLDX,, Serialized)
+    Method (FLDX)
     {
         Field (\_SB_.MEM.SMEM, AnyAcc, NoLock, Preserve)
         {   //  Field:  SMEM overlay using 32-bit field elements
@@ -1434,7 +1434,7 @@ DefinitionBlock (
     }
 
 
-    Method (OBJ2, 1, Serialized)
+    Method (OBJ2, 1)
     {
         Store ("++++++++ Creating Buffer BUFO", Debug)
         Name (BUFO, Buffer (32) {})
@@ -1906,7 +1906,7 @@ DefinitionBlock (
     }
 
 
-    Method (REFS,, Serialized)
+    Method (REFS)
     {
         Name (BBUF, Buffer() {0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7})
 
@@ -1982,7 +1982,7 @@ DefinitionBlock (
     }
 
 
-    Method (INDX, 0, Serialized)
+    Method (INDX, 0)
     {
         Name(STAT,Package(4){})
         Store(0x44443333,Index(STAT,0))
@@ -2158,7 +2158,7 @@ DefinitionBlock (
 //
     Device (NOSV)
     {
-        Method (TEST,, Serialized)
+        Method (TEST)
         {
             Store ("++++++++ NoSave Test", Debug)
 
@@ -2659,7 +2659,7 @@ DefinitionBlock (
             Return (Arg0)
         }
 
-        Method (RBUF,, Serialized)
+        Method (RBUF)
         {   //  RBUF: Return Buffer from local variable
             Name (ABUF, Buffer() {"ARBITRARY_BUFFER"})
 
@@ -3333,7 +3333,7 @@ DefinitionBlock (
 
         }//OROP
 
-        Method(TEST,, Serialized)
+        Method(TEST)
         {
             Store ("++++++++ AndOrOp Test", Debug)
 
@@ -3425,7 +3425,7 @@ DefinitionBlock (
             SMBY,   8,  //  8-bit BYTE
         }   //  Field(RAM)
 
-        Method (TEST,, Serialized)
+        Method (TEST)
         {
             Store ("++++++++ AddSubOp Test", Debug)
 
@@ -3518,7 +3518,7 @@ DefinitionBlock (
             SMBY,   8,  //  8-bit BYTE
         }   //  Field(RAM)
 
-        Method (TEST,, Serialized)
+        Method (TEST)
         {
             Store ("++++++++ IncDecOp Test", Debug)
 
@@ -4125,7 +4125,7 @@ DefinitionBlock (
             SMBY,   8,  //  8-bit BYTE
         }   //  Field(RAM)
 
-        Method (TEST,, Serialized)
+        Method (TEST)
         {
             Store ("++++++++ MulDivOp Test", Debug)
 
@@ -4682,7 +4682,7 @@ DefinitionBlock (
     Device (XORD)
     {
         //This Method tests XOr operator for all the data types i.e. BYTE, WORD and DWORD
-        Method (TEST,, Serialized)
+        Method (TEST)
         {
             Store ("++++++++ Xor Test", Debug)
 
@@ -5108,7 +5108,7 @@ DefinitionBlock (
         //          index), but are guaranteed to be unique so the failing test
         //          case can be uniquely identified.
         //
-        Method (MADM, 1, Serialized)    //  Misaligned Dynamic RAM SystemMemory OperationRegion
+        Method (MADM, 1)    //  Misaligned Dynamic RAM SystemMemory OperationRegion
         //  Arg0    --  SystemMemory OperationRegion base address
         {   //  MADM:   Misaligned Dynamic RAM SystemMemory OperationRegion
             OperationRegion (RAM, SystemMemory, Arg0, 0x100)
@@ -6396,7 +6396,7 @@ DefinitionBlock (
         //  zero if the strings mismatch, or 1 if the strings match.
         //  This exercises the test case of copying a string into a buffer
         //  and performing an IndexOp on the resulting buffer.
-        Method (MCTH, 2, Serialized)    //  Control Method to compare two strings
+        Method (MCTH, 2)    //  Control Method to compare two strings
         {   //  MCTH:   Control Method to compare two strings
             //  Arg0:       first string to compare
             //  Arg1:       second string to compare
@@ -6546,7 +6546,7 @@ DefinitionBlock (
                     {   Return (0x0F)   }   //  Battery not present
             }   //  _STA
 
-            Method (_BIF,, Serialized)
+            Method (_BIF)
             {
                 Name (BUFR, Package(13) {})
                 Store (\_SB.PCI2.ISA.EC0.BPU0, Index (BUFR,0))  //  Power Unit
@@ -6570,7 +6570,7 @@ DefinitionBlock (
                 Return (BUFR)
             }   //  _BIF
 
-            Method (_BST,, Serialized)
+            Method (_BST)
             {
                 Name (BUFR, Package(4) {1, 0x100, 0x76543210, 0x180})
                 Return (BUFR)
@@ -6581,7 +6581,7 @@ DefinitionBlock (
                 Store (arg0, \_SB.PCI2.ISA.EC0.BTP0)    //  Set Battery Trip point
             }
 
-            Method (TEST,, Serialized)
+            Method (TEST)
             {
 
                 Store ("++++++++ IndexOp Test", Debug)
@@ -6838,7 +6838,7 @@ DefinitionBlock (
             Package (3) {0, 0, 0}
         })  //  C17A
 
-        Method (C17B, 1, Serialized)
+        Method (C17B, 1)
         {   //  C17B:   _BIF implementation
             Name (C17C, Package (13)
             {   //  C17C:   _BIF control method return package
@@ -6908,7 +6908,7 @@ DefinitionBlock (
 
         Device (IDX3)
         {
-            Method (LCLB,, Serialized)
+            Method (LCLB)
             {   //  LCLB control method: test Index(Local#) where Local# is buffer
                 //  Local0 is index counter
                 //  Local1 is buffer
@@ -6960,7 +6960,7 @@ DefinitionBlock (
                 Return (0)  //  Pass
             }   //  LCLB control method: test Index(Local#) where Local# is buffer
 
-            Method (LCLP,, Serialized)
+            Method (LCLP)
             {   //  LCLP control method: test Index(Local#) where Local# is package
                 //  Local0 is index counter
                 //  Local1 is package
@@ -7066,7 +7066,7 @@ DefinitionBlock (
         // Generic Test method
         //
         // This test returns 0xE (14) - ObjectType = Buffer Field
-        Method(TST1,, Serialized)
+        Method(TST1)
         {
             Name (DEST, Buffer ()                           //  62 characters plus NULL
                 {"Destination buffer that is longer than the short source buffer"})
@@ -7085,7 +7085,7 @@ DefinitionBlock (
 
         }
 
-        Method(TST2,, Serialized)
+        Method(TST2)
         {
             Name (BUF0, Buffer() {0x1, 0x2, 0x3, 0x4, 0x5})
             Store(0x55, Index(BUF0, 2))
@@ -7102,7 +7102,7 @@ DefinitionBlock (
 
         }
 
-        Method(TST3,, Serialized)
+        Method(TST3)
         {
             Name (BUF1, Buffer() {0x1, 0x2, 0x3, 0x4, 0x5})
             Store(Index(BUF1, 1), Local0)
@@ -7293,7 +7293,7 @@ DefinitionBlock (
 
         }
 
-        Method (TSTF,, Serialized)
+        Method (TSTF)
         {
             Name (SRCB, Buffer (12) {}) //  12 characters
             Store ("Short Buffer", SRCB)
@@ -7318,7 +7318,7 @@ DefinitionBlock (
             Return(0)
         }
 
-        Method (TSTG,, Serialized)
+        Method (TSTG)
         {
 
             Name (SRCB, Buffer (12) {}) //  12 characters
@@ -7403,7 +7403,7 @@ DefinitionBlock (
         // This test shows that MS ACPI.SYS stores only the lower 8-bits of a 32-bit
         //  number into the index'ed buffer
         //
-        Method (TSTH,, Serialized)
+        Method (TSTH)
         {
             // Create a Destination Buffer
             Name (DBUF, Buffer () {"abcdefghijklmnopqrstuvwxyz"})
@@ -7439,7 +7439,7 @@ DefinitionBlock (
             Return(0)
         }
 
-        Method (TSTI,, Serialized)
+        Method (TSTI)
         {
             // Create a Destination Buffer
             Name (DBUF, Buffer () {"abcdefghijklmnopqrstuvwxyz"})
@@ -7475,7 +7475,7 @@ DefinitionBlock (
             Return(0)
         }
 
-        Method(TSTJ,, Serialized)
+        Method(TSTJ)
         {
             // Create a Destination Buffer
             Name (DBUF, Buffer () {"abcdefghijklmnopqrstuvwxyz"})
@@ -7511,7 +7511,7 @@ DefinitionBlock (
             Return(0)
         }
 
-        Method(TSTK,, Serialized)
+        Method(TSTK)
         {
             // Create a Destination Buffer
             Name (DBUF, Buffer () {"abcdefghijklmnopqrstuvwxyz"})
@@ -7547,7 +7547,7 @@ DefinitionBlock (
             Return(0)
         }
 
-        Method(TSTL,, Serialized)
+        Method(TSTL)
         {
             // Create a Destination Buffer
             Name (DBUF, Buffer () {"abcdefghijklmnopqrstuvwxyz"})
@@ -7733,7 +7733,7 @@ DefinitionBlock (
     Device (MTCH)
     {
 
-        Method (TEST,, Serialized)
+        Method (TEST)
         {
             Store ("++++++++ MatchOp Test", Debug)
 
@@ -8267,7 +8267,7 @@ DefinitionBlock (
                     {   Return (0x0F)   }   //  battery not present
             }   //  _STA
 
-            Method (_BIF,, Serialized)
+            Method (_BIF)
             {   //  _BIF
                 Name (BUFR, Package (13)    {})
 
@@ -8291,7 +8291,7 @@ DefinitionBlock (
 
         Device (IDX2)
         {
-            Method (B2IB,, Serialized)
+            Method (B2IB)
             {   //  B2IB:   store from Buffer into Index'ed Buffer
 
                 Name (SRCB, Buffer ()   {"Short Buffer"})   //  12 characters plus NULL
@@ -8485,7 +8485,7 @@ DefinitionBlock (
                 Return (0)  //  pass
             }   //  B2IB:   store from Buffer into Index'ed Buffer
 
-            Method (FB2P,, Serialized)
+            Method (FB2P)
             {   //  FB2P:   store from Field Buffer into Index'ed Package
                 Name (DEST, Package (2) {})
 
@@ -8700,7 +8700,7 @@ DefinitionBlock (
             Return (0)
         }   //  SAR0:   SizeOf(Arg) test control method
 
-        Method (SARG,, Serialized)
+        Method (SARG)
         {   //  SARG:   SizeOf(Arg) test control method
             Name (BUFR, Buffer (12) {}) //  uninitialized Buffer
             Name (BUF1, Buffer() {0x01, 0x02, 0x03, 0x04, 0x05})
@@ -8965,7 +8965,7 @@ DefinitionBlock (
             Return (0)
         }   //  SARG:   SizeOf(Arg) test control method
 
-        Method (SBUF,, Serialized)
+        Method (SBUF)
         {   //  SBUF:   SizeOf(Buffer) test control method
             Name (BUFR, Buffer (12) {})
 
@@ -9026,7 +9026,7 @@ DefinitionBlock (
         }   //  SIND:   SizeOf(Index(,,)) test control method
         ****************************************************/
 
-        Method (SLOC,, Serialized)
+        Method (SLOC)
         {   //  SLOC:   SizeOf(Local) test control method
             Name (BUFR, Buffer (12) {}) //  uninitialized Buffer
             Name (STR0, "String")

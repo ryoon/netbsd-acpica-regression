@@ -50,9 +50,6 @@ static void
 AhDisplayUsage (
     void);
 
-#define AH_UTILITY_NAME             "ACPI Help Utility"
-#define AH_SUPPORTED_OPTIONS        "ehikmopsv"
-
 
 /******************************************************************************
  *
@@ -69,7 +66,6 @@ AhDisplayUsage (
 
     ACPI_USAGE_HEADER ("acpihelp <options> [NamePrefix | HexValue]");
     ACPI_OPTION ("-h",                      "Display help");
-    ACPI_OPTION ("-v",                      "Display version information");
 
     printf ("\nACPI Names and Symbols:\n");
     ACPI_OPTION ("-k [NamePrefix]",         "Find/Display ASL non-operator keyword(s)");
@@ -108,7 +104,7 @@ main (
 
 
     ACPI_DEBUG_INITIALIZE (); /* For debug version only */
-    printf (ACPI_COMMON_SIGNON (AH_UTILITY_NAME));
+    printf (ACPI_COMMON_SIGNON ("ACPI Help Utility"));
     DecodeType = AH_DECODE_DEFAULT;
 
     if (argc < 2)
@@ -119,7 +115,7 @@ main (
 
     /* Command line options */
 
-    while ((j = AcpiGetopt (argc, argv, AH_SUPPORTED_OPTIONS)) != EOF) switch (j)
+    while ((j = AcpiGetopt (argc, argv, "ehikmops")) != EOF) switch (j)
     {
     case 'e':
 
@@ -155,10 +151,6 @@ main (
 
         DecodeType = AH_DECODE_ASL;
         break;
-
-    case 'v': /* -v: (Version): signon already emitted, just exit */
-
-        return (0);
 
     case 'h':
     default:

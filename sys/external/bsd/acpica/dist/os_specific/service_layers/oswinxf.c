@@ -1167,7 +1167,6 @@ AcpiOsReadPciConfiguration (
     UINT32                  Width)
 {
 
-    *Value = 0;
     return (AE_OK);
 }
 

@@ -292,6 +292,15 @@ AcpiEvTerminate (
 
         Status = AcpiEvWalkGpeList (AcpiHwDisableGpeBlock, NULL);
 
+        /* Remove SCI handler */
+
+        Status = AcpiEvRemoveSciHandler ();
+        if (ACPI_FAILURE(Status))
+        {
+            ACPI_ERROR ((AE_INFO,
+                "Could not remove SCI handler"));
+        }
+
         Status = AcpiEvRemoveGlobalLockHandler ();
         if (ACPI_FAILURE(Status))
         {
@@ -300,15 +309,6 @@ AcpiEvTerminate (
         }
 
         AcpiGbl_EventsInitialized = FALSE;
-    }
-
-    /* Remove SCI handlers */
-
-    Status = AcpiEvRemoveAllSciHandlers ();
-    if (ACPI_FAILURE(Status))
-    {
-        ACPI_ERROR ((AE_INFO,
-            "Could not remove SCI handler"));
     }
 
     /* Deallocate all handler objects installed within GPE info structs */

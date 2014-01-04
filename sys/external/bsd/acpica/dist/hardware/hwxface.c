@@ -131,8 +131,7 @@ AcpiRead (
     UINT64                  *ReturnValue,
     ACPI_GENERIC_ADDRESS    *Reg)
 {
-    UINT32                  ValueLo;
-    UINT32                  ValueHi;
+    UINT32                  Value;
     UINT32                  Width;
     UINT64                  Address;
     ACPI_STATUS             Status;
@@ -154,8 +153,13 @@ AcpiRead (
         return (Status);
     }
 
+    /* Initialize entire 64-bit return value to zero */
+
+    *ReturnValue = 0;
+    Value = 0;
+
     /*
-     * Two address spaces supported: Memory or I/O. PCI_Config is
+     * Two address spaces supported: Memory or IO. PCI_Config is
      * not supported here because the GAS structure is insufficient
      */
     if (Reg->SpaceId == ACPI_ADR_SPACE_SYSTEM_MEMORY)
@@ -169,9 +173,6 @@ AcpiRead (
     }
     else /* ACPI_ADR_SPACE_SYSTEM_IO, validated earlier */
     {
-        ValueLo = 0;
-        ValueHi = 0;
-
         Width = Reg->BitWidth;
         if (Width == 64)
         {
@@ -179,27 +180,25 @@ AcpiRead (
         }
 
         Status = AcpiHwReadPort ((ACPI_IO_ADDRESS)
-                    Address, &ValueLo, Width);
+                    Address, &Value, Width);
         if (ACPI_FAILURE (Status))
         {
             return (Status);
         }
+        *ReturnValue = Value;
 
         if (Reg->BitWidth == 64)
         {
             /* Read the top 32 bits */
 
             Status = AcpiHwReadPort ((ACPI_IO_ADDRESS)
-                        (Address + 4), &ValueHi, 32);
+                        (Address + 4), &Value, 32);
             if (ACPI_FAILURE (Status))
             {
                 return (Status);
             }
+            *ReturnValue |= ((UINT64) Value << 32);
         }
-
-        /* Set the return value only if status is AE_OK */
-
-        *ReturnValue = (ValueLo | ((UINT64) ValueHi << 32));
     }
 
     ACPI_DEBUG_PRINT ((ACPI_DB_IO,
@@ -208,7 +207,7 @@ AcpiRead (
         ACPI_FORMAT_UINT64 (Address),
         AcpiUtGetRegionName (Reg->SpaceId)));
 
-    return (AE_OK);
+    return (Status);
 }
 
 ACPI_EXPORT_SYMBOL (AcpiRead)

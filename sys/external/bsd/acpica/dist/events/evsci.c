@@ -61,57 +61,6 @@ AcpiEvSciXruptHandler (
 
 /*******************************************************************************
  *
- * FUNCTION:    AcpiEvSciDispatch
- *
- * PARAMETERS:  None
- *
- * RETURN:      Status code indicates whether interrupt was handled.
- *
- * DESCRIPTION: Dispatch the SCI to all host-installed SCI handlers.
- *
- ******************************************************************************/
-
-UINT32
-AcpiEvSciDispatch (
-    void)
-{
-    ACPI_SCI_HANDLER_INFO   *SciHandler;
-    ACPI_CPU_FLAGS          Flags;
-    UINT32                  IntStatus = ACPI_INTERRUPT_NOT_HANDLED;
-
-
-    ACPI_FUNCTION_NAME (EvSciDispatch);
-
-
-    /* Are there any host-installed SCI handlers? */
-
-    if (!AcpiGbl_SciHandlerList)
-    {
-        return (IntStatus);
-    }
-
-    Flags = AcpiOsAcquireLock (AcpiGbl_GpeLock);
-
-    /* Invoke all host-installed SCI handlers */
-
-    SciHandler = AcpiGbl_SciHandlerList;
-    while (SciHandler)
-    {
-        /* Invoke the installed handler (at interrupt level) */
-
-        IntStatus |= SciHandler->Address (
-            SciHandler->Context);
-
-        SciHandler = SciHandler->Next;
-    }
-
-    AcpiOsReleaseLock (AcpiGbl_GpeLock, Flags);
-    return (IntStatus);
-}
-
-
-/*******************************************************************************
- *
  * FUNCTION:    AcpiEvSciXruptHandler
  *
  * PARAMETERS:  Context   - Calling Context
@@ -151,10 +100,6 @@ AcpiEvSciXruptHandler (
      */
     InterruptHandled |= AcpiEvGpeDetect (GpeXruptList);
 
-    /* Invoke all host-installed SCI handlers */
-
-    InterruptHandled |= AcpiEvSciDispatch ();
-
     AcpiSciCount++;
     return_UINT32 (InterruptHandled);
 }
@@ -184,13 +129,14 @@ AcpiEvGpeXruptHandler (
 
 
     /*
-     * We are guaranteed by the ACPICA initialization/shutdown code that
+     * We are guaranteed by the ACPI CA initialization/shutdown code that
      * if this interrupt handler is installed, ACPI is enabled.
      */
 
     /* GPEs: Check for and dispatch any GPEs that have occurred */
 
     InterruptHandled |= AcpiEvGpeDetect (GpeXruptList);
+
     return_UINT32 (InterruptHandled);
 }
 
@@ -225,15 +171,15 @@ AcpiEvInstallSciHandler (
 
 /******************************************************************************
  *
- * FUNCTION:    AcpiEvRemoveAllSciHandlers
+ * FUNCTION:    AcpiEvRemoveSciHandler
  *
  * PARAMETERS:  none
  *
- * RETURN:      AE_OK if handler uninstalled, AE_ERROR if handler was not
+ * RETURN:      E_OK if handler uninstalled OK, E_ERROR if handler was not
  *              installed to begin with
  *
  * DESCRIPTION: Remove the SCI interrupt handler. No further SCIs will be
- *              taken. Remove all host-installed SCI handlers.
+ *              taken.
  *
  * Note:  It doesn't seem important to disable all events or set the event
  *        enable registers to their original values. The OS should disable
@@ -243,15 +189,13 @@ AcpiEvInstallSciHandler (
  ******************************************************************************/
 
 ACPI_STATUS
-AcpiEvRemoveAllSciHandlers (
+AcpiEvRemoveSciHandler (
     void)
 {
-    ACPI_SCI_HANDLER_INFO   *SciHandler;
-    ACPI_CPU_FLAGS          Flags;
     ACPI_STATUS             Status;
 
 
-    ACPI_FUNCTION_TRACE (EvRemoveAllSciHandlers);
+    ACPI_FUNCTION_TRACE (EvRemoveSciHandler);
 
 
     /* Just let the OS remove the handler and disable the level */
@@ -259,23 +203,6 @@ AcpiEvRemoveAllSciHandlers (
     Status = AcpiOsRemoveInterruptHandler ((UINT32) AcpiGbl_FADT.SciInterrupt,
                 AcpiEvSciXruptHandler);
 
-    if (!AcpiGbl_SciHandlerList)
-    {
-        return (Status);
-    }
-
-    Flags = AcpiOsAcquireLock (AcpiGbl_GpeLock);
-
-    /* Free all host-installed SCI handlers */
-
-    while (AcpiGbl_SciHandlerList)
-    {
-        SciHandler = AcpiGbl_SciHandlerList;
-        AcpiGbl_SciHandlerList = SciHandler->Next;
-        ACPI_FREE (SciHandler);
-    }
-
-    AcpiOsReleaseLock (AcpiGbl_GpeLock, Flags);
     return_ACPI_STATUS (Status);
 }
 
