@@ -53,6 +53,11 @@
 
 /* Local prototypes */
 
+static UINT8 *
+AcpiTbScanMemoryForRsdp (
+    UINT8                   *StartAddress,
+    UINT32                  Length);
+
 static ACPI_STATUS
 AcpiTbValidateRsdp (
     ACPI_TABLE_RSDP         *Rsdp);
@@ -247,7 +252,7 @@ ACPI_EXPORT_SYMBOL (AcpiFindRootPointer)
  *
  ******************************************************************************/
 
-UINT8 *
+static UINT8 *
 AcpiTbScanMemoryForRsdp (
     UINT8                   *StartAddress,
     UINT32                  Length)

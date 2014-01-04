@@ -541,9 +541,8 @@ DtCompileDmar (
     DT_FIELD                *SubtableStart;
     ACPI_DMTABLE_INFO       *InfoTable;
     ACPI_DMAR_HEADER        *DmarHeader;
-    ACPI_DMAR_DEVICE_SCOPE  *DmarDeviceScope;
-    UINT32                  DeviceScopeLength;
-    UINT32                  PciPathLength;
+    UINT8                   *ReservedBuffer;
+    UINT32                  ReservedSize;
 
 
     Status = DtCompileTable (PFieldList, AcpiDmTableInfoDmar, &Subtable, TRUE);
@@ -554,7 +553,17 @@ DtCompileDmar (
 
     ParentTable = DtPeekSubtable ();
     DtInsertSubtable (ParentTable, Subtable);
-    DtPushSubtable (Subtable);
+
+    /* DMAR Reserved area */
+
+    ReservedSize = (UINT32) sizeof (((ACPI_TABLE_DMAR *) NULL)->Reserved);
+    ReservedBuffer = UtLocalCalloc (ReservedSize);
+
+    DtCreateSubtable (ReservedBuffer, ReservedSize, &Subtable);
+
+    ACPI_FREE (ReservedBuffer);
+    ParentTable = DtPeekSubtable ();
+    DtInsertSubtable (ParentTable, Subtable);
 
     while (*PFieldList)
     {
@@ -612,13 +621,10 @@ DtCompileDmar (
 
         ParentTable = DtPeekSubtable ();
         DtInsertSubtable (ParentTable, Subtable);
-        DtPushSubtable (Subtable);
 
         /* Optional Device Scope subtables */
 
-        DeviceScopeLength = DmarHeader->Length - Subtable->Length -
-            ParentTable->Length;
-        while (DeviceScopeLength)
+        while (*PFieldList)
         {
             Status = DtCompileTable (PFieldList, AcpiDmTableInfoDmarScope,
                         &Subtable, FALSE);
@@ -631,12 +637,9 @@ DtCompileDmar (
             DtInsertSubtable (ParentTable, Subtable);
             DtPushSubtable (Subtable);
 
-            DmarDeviceScope = ACPI_CAST_PTR (ACPI_DMAR_DEVICE_SCOPE, Subtable->Buffer);
-
             /* Optional PCI Paths */
 
-            PciPathLength = DmarDeviceScope->Length - Subtable->Length;
-            while (PciPathLength)
+            while (*PFieldList)
             {
                 Status = DtCompileTable (PFieldList, TableInfoDmarPciPath,
                             &Subtable, FALSE);
@@ -648,14 +651,9 @@ DtCompileDmar (
 
                 ParentTable = DtPeekSubtable ();
                 DtInsertSubtable (ParentTable, Subtable);
-                PciPathLength -= Subtable->Length;
             }
-
-            DtPopSubtable ();
-            DeviceScopeLength -= DmarDeviceScope->Length;
         }
 
-        DtPopSubtable ();
         DtPopSubtable ();
     }
 

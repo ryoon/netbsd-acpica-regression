@@ -823,7 +823,6 @@ TrLinkChildren (
         {
             AslError (ASL_WARNING, ASL_MSG_COMPILER_INTERNAL, Child,
                 "Child node list invalid");
-            va_end(ap);
             return (Op);
         }
 
@@ -870,8 +869,8 @@ TrLinkChildren (
         }
         PrevChild = Child;
     }
-
     va_end(ap);
+
     DbgPrint (ASL_PARSE_OUTPUT, "\n\n");
     return (Op);
 }

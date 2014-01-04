@@ -467,13 +467,12 @@ DtCompileBuffer (
         if (ACPI_FAILURE (Status))
         {
             DtError (ASL_ERROR, ASL_MSG_BUFFER_ELEMENT, Field, MsgBuffer);
-            goto Exit;
+            return (ByteLength - Count);
         }
 
         Buffer[i] = (UINT8) Value;
     }
 
-Exit:
     ACPI_FREE (StringValue);
     return (ByteLength - Count);
 }

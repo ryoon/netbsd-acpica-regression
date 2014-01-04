@@ -139,11 +139,9 @@ AcpiDbGetPointer (
     void                    *Target)
 {
     void                    *ObjPtr;
-    ACPI_SIZE               Address;
 
 
-    Address = ACPI_STRTOUL (Target, NULL, 16);
-    ObjPtr = ACPI_TO_POINTER (Address);
+    ObjPtr = ACPI_TO_POINTER (ACPI_STRTOUL (Target, NULL, 16));
     return (ObjPtr);
 }
 

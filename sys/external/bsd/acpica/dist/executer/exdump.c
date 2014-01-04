@@ -357,7 +357,6 @@ AcpiExDumpObject (
 {
     UINT8                   *Target;
     char                    *Name;
-    const char              *ReferenceName;
     UINT8                   Count;
 
 
@@ -442,8 +441,8 @@ AcpiExDumpObject (
 
         case ACPI_EXD_REFERENCE:
 
-            ReferenceName = AcpiUtGetReferenceName (ObjDesc);
-            AcpiExOutString ("Class Name", ACPI_CAST_PTR (char, ReferenceName));
+            AcpiExOutString ("Class Name",
+                ACPI_CAST_PTR (char, AcpiUtGetReferenceName (ObjDesc)));
             AcpiExDumpReferenceObj (ObjDesc);
             break;
 

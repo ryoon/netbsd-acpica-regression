@@ -105,15 +105,13 @@ AcpiDbConvertToNode (
     char                    *InString)
 {
     ACPI_NAMESPACE_NODE     *Node;
-    ACPI_SIZE               Address;
 
 
     if ((*InString >= 0x30) && (*InString <= 0x39))
     {
         /* Numeric argument, convert */
 
-        Address = ACPI_STRTOUL (InString, NULL, 16);
-        Node = ACPI_TO_POINTER (Address);
+        Node = ACPI_TO_POINTER (ACPI_STRTOUL (InString, NULL, 16));
         if (!AcpiOsReadable (Node, sizeof (ACPI_NAMESPACE_NODE)))
         {
             AcpiOsPrintf ("Address %p is invalid in this address space\n",
