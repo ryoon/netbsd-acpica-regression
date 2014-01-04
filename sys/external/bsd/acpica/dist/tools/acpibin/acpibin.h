@@ -66,6 +66,7 @@
 /* Globals */
 
 EXTERN BOOLEAN              INIT_GLOBAL (Gbl_TerseMode, FALSE);
+EXTERN FILE                 INIT_GLOBAL (*AcpiGbl_DebugFile, NULL);
 
 
 /* Prototypes */

@@ -286,13 +286,13 @@ AcpiOsAcquireObject (
 
     if (!Cache)
     {
-        return_PTR (NULL);
+        return (NULL);
     }
 
     Status = AcpiUtAcquireMutex (ACPI_MTX_CACHES);
     if (ACPI_FAILURE (Status))
     {
-        return_PTR (NULL);
+        return (NULL);
     }
 
     ACPI_MEM_TRACKING (Cache->Requests++);
@@ -315,7 +315,7 @@ AcpiOsAcquireObject (
         Status = AcpiUtReleaseMutex (ACPI_MTX_CACHES);
         if (ACPI_FAILURE (Status))
         {
-            return_PTR (NULL);
+            return (NULL);
         }
 
         /* Clear (zero) the previously used Object */
@@ -340,16 +340,16 @@ AcpiOsAcquireObject (
         Status = AcpiUtReleaseMutex (ACPI_MTX_CACHES);
         if (ACPI_FAILURE (Status))
         {
-            return_PTR (NULL);
+            return (NULL);
         }
 
         Object = ACPI_ALLOCATE_ZEROED (Cache->ObjectSize);
         if (!Object)
         {
-            return_PTR (NULL);
+            return (NULL);
         }
     }
 
-    return_PTR (Object);
+    return (Object);
 }
 #endif /* ACPI_USE_LOCAL_CACHE */

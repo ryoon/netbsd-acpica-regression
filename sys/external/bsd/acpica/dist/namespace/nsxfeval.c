@@ -92,7 +92,7 @@ AcpiEvaluateObjectTyped (
     ACPI_OBJECT_TYPE        ReturnType)
 {
     ACPI_STATUS             Status;
-    BOOLEAN                 FreeBufferOnError = FALSE;
+    BOOLEAN                 MustFree = FALSE;
 
     ACPI_FUNCTION_TRACE (AcpiEvaluateObjectTyped);
 
@@ -106,13 +106,12 @@ AcpiEvaluateObjectTyped (
 
     if (ReturnBuffer->Length == ACPI_ALLOCATE_BUFFER)
     {
-        FreeBufferOnError = TRUE;
+        MustFree = TRUE;
     }
 
     /* Evaluate the object */
 
-    Status = AcpiEvaluateObject (Handle, Pathname,
-        ExternalParams, ReturnBuffer);
+    Status = AcpiEvaluateObject (Handle, Pathname, ExternalParams, ReturnBuffer);
     if (ACPI_FAILURE (Status))
     {
         return_ACPI_STATUS (Status);
@@ -147,14 +146,13 @@ AcpiEvaluateObjectTyped (
         AcpiUtGetTypeName (((ACPI_OBJECT *) ReturnBuffer->Pointer)->Type),
         AcpiUtGetTypeName (ReturnType)));
 
-    if (FreeBufferOnError)
+    if (MustFree)
     {
         /*
-         * Free a buffer created via ACPI_ALLOCATE_BUFFER.
+         * Caller used ACPI_ALLOCATE_BUFFER, free the return buffer.
          * Note: We use AcpiOsFree here because AcpiOsAllocate was used
-         * to allocate the buffer. This purposefully bypasses the
-         * (optionally enabled) allocation tracking mechanism since we
-         * only want to track internal allocations.
+         * to allocate the buffer. This purposefully bypasses the internal
+         * allocation tracking mechanism (if it is enabled).
          */
         AcpiOsFree (ReturnBuffer->Pointer);
         ReturnBuffer->Pointer = NULL;

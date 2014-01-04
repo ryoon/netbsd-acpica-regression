@@ -809,11 +809,8 @@ AcpiDmDumpDbg2 (
 
         /* Dump the OemData (optional) */
 
-        if (SubTable->OemDataOffset)
-        {
-            AcpiDmDumpBuffer (SubTable, SubTable->OemDataOffset, SubTable->OemDataLength,
-                Offset + SubTable->OemDataOffset, "OEM Data");
-        }
+        AcpiDmDumpBuffer (SubTable, SubTable->OemDataOffset, SubTable->OemDataLength,
+            Offset + SubTable->OemDataOffset, "OEM Data");
 
         /* Point to next sub-table */
 
@@ -1950,31 +1947,11 @@ AcpiDmDumpPcct (
         return;
     }
 
-    /* Subtables */
+    /* Sub-tables */
 
     SubTable = ACPI_ADD_PTR (ACPI_PCCT_SUBSPACE, Table, Offset);
     while (Offset < Table->Length)
     {
-        /* Common subtable header */
-
-        AcpiOsPrintf ("\n");
-        Status = AcpiDmDumpTable (Length, Offset, SubTable,
-                    SubTable->Header.Length, AcpiDmTableInfoPcctHdr);
-        if (ACPI_FAILURE (Status))
-        {
-            return;
-        }
-
-        /* ACPI 5.0: Only one type of PCCT subtable is supported */
-
-        if (SubTable->Header.Type != ACPI_PCCT_TYPE_GENERIC_SUBSPACE)
-        {
-            AcpiOsPrintf (
-                "\n**** Unexpected or unknown PCCT subtable type 0x%X\n\n",
-                SubTable->Header.Type);
-            return;
-        }
-
         AcpiOsPrintf ("\n");
         Status = AcpiDmDumpTable (Length, Offset, SubTable,
                     SubTable->Header.Length, AcpiDmTableInfoPcct0);
@@ -1983,7 +1960,7 @@ AcpiDmDumpPcct (
             return;
         }
 
-        /* Point to next subtable */
+        /* Point to next sub-table */
 
         Offset += SubTable->Header.Length;
         SubTable = ACPI_ADD_PTR (ACPI_PCCT_SUBSPACE, SubTable,

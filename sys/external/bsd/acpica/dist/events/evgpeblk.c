@@ -97,9 +97,10 @@ AcpiEvInstallGpeBlock (
         return_ACPI_STATUS (Status);
     }
 
-    Status = AcpiEvGetGpeXruptBlock (InterruptNumber, &GpeXruptBlock);
-    if (ACPI_FAILURE (Status))
+    GpeXruptBlock = AcpiEvGetGpeXruptBlock (InterruptNumber);
+    if (!GpeXruptBlock)
     {
+        Status = AE_NO_MEMORY;
         goto UnlockAndExit;
     }
 
@@ -127,7 +128,7 @@ AcpiEvInstallGpeBlock (
 
 
 UnlockAndExit:
-    (void) AcpiUtReleaseMutex (ACPI_MTX_EVENTS);
+    Status = AcpiUtReleaseMutex (ACPI_MTX_EVENTS);
     return_ACPI_STATUS (Status);
 }
 
