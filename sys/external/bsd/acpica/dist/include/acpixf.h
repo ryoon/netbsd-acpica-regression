@@ -76,7 +76,7 @@ extern UINT8                AcpiGbl_CreateOsiMethod;
 extern UINT8                AcpiGbl_DisableAutoRepair;
 extern UINT8                AcpiGbl_DisableSsdtTableLoad;
 extern UINT8                AcpiGbl_DoNotUseXsdt;
-extern _Bool                AcpiGbl_EnableAmlDebugObject;
+extern UINT8                AcpiGbl_EnableAmlDebugObject;
 extern UINT8                AcpiGbl_EnableInterpreterSlack;
 extern UINT32               AcpiGbl_TraceFlags;
 extern ACPI_NAME            AcpiGbl_TraceMethodName;
@@ -227,13 +227,13 @@ AcpiFindRootPointer (
 
 ACPI_STATUS
 AcpiGetTableHeader (
-    ACPI_CONST_STRING       Signature,
+    ACPI_STRING             Signature,
     UINT32                  Instance,
     ACPI_TABLE_HEADER       *OutTableHeader);
 
 ACPI_STATUS
 AcpiGetTable (
-    ACPI_CONST_STRING       Signature,
+    ACPI_STRING             Signature,
     UINT32                  Instance,
     ACPI_TABLE_HEADER       **OutTable);
 
@@ -281,7 +281,7 @@ AcpiGetName (
 ACPI_STATUS
 AcpiGetHandle (
     ACPI_HANDLE             Parent,
-    ACPI_CONST_STRING       Pathname,
+    ACPI_STRING             Pathname,
     ACPI_HANDLE             *RetHandle);
 
 ACPI_STATUS
@@ -315,14 +315,14 @@ AcpiDebugTrace (
 ACPI_STATUS
 AcpiEvaluateObject (
     ACPI_HANDLE             Object,
-    ACPI_CONST_STRING       Pathname,
+    ACPI_STRING             Pathname,
     ACPI_OBJECT_LIST        *ParameterObjects,
     ACPI_BUFFER             *ReturnObjectBuffer);
 
 ACPI_STATUS
 AcpiEvaluateObjectTyped (
     ACPI_HANDLE             Object,
-    ACPI_CONST_STRING       Pathname,
+    ACPI_STRING             Pathname,
     ACPI_OBJECT_LIST        *ExternalParams,
     ACPI_BUFFER             *ReturnBuffer,
     ACPI_OBJECT_TYPE        ReturnType);
@@ -630,7 +630,7 @@ AcpiWalkResourceBuffer (
 ACPI_STATUS
 AcpiWalkResources (
     ACPI_HANDLE                 Device,
-    const char                  *Name,
+    char                        *Name,
     ACPI_WALK_RESOURCE_CALLBACK UserFunction,
     void                        *Context);
 

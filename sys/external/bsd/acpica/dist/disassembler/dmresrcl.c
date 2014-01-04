@@ -55,7 +55,7 @@
 
 /* Common names for address and memory descriptors */
 
-static const char           *AcpiDmAddressNames[] =
+static char                 *AcpiDmAddressNames[] =
 {
     "Granularity",
     "Range Minimum",
@@ -64,7 +64,7 @@ static const char           *AcpiDmAddressNames[] =
     "Length"
 };
 
-static const char           *AcpiDmMemoryNames[] =
+static char                 *AcpiDmMemoryNames[] =
 {
     "Range Minimum",
     "Range Maximum",
@@ -1007,7 +1007,7 @@ AcpiDmInterruptDescriptor (
 
 void
 AcpiDmVendorCommon (
-    const char              *Name,
+    char                    *Name,
     UINT8                   *ByteData,
     UINT32                  Length,
     UINT32                  Level)

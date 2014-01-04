@@ -130,8 +130,8 @@ typedef const struct acpi_rsdump_info
 {
     UINT8                   Opcode;
     UINT8                   Offset;
-    const char              *Name;
-    const char * const      *Pointer;
+    char                    *Name;
+    const char              **Pointer;
 
 } ACPI_RSDUMP_INFO;
 

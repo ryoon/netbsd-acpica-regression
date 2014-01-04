@@ -79,7 +79,7 @@ AcpiTbSelectAddress (
 
 typedef struct acpi_fadt_info
 {
-    const char              *Name;
+    char                    *Name;
     UINT16                  Address64;
     UINT16                  Address32;
     UINT16                  Length;
@@ -525,10 +525,10 @@ AcpiTbConvertFadt (
      * Expand the 32-bit FACS and DSDT addresses to 64-bit as necessary.
      * Later ACPICA code will always use the X 64-bit field.
      */
-    AcpiGbl_FADT.XFacs = AcpiTbSelectAddress (__UNCONST("FACS"),
+    AcpiGbl_FADT.XFacs = AcpiTbSelectAddress ("FACS",
         AcpiGbl_FADT.Facs, AcpiGbl_FADT.XFacs);
 
-    AcpiGbl_FADT.XDsdt = AcpiTbSelectAddress (__UNCONST("DSDT"),
+    AcpiGbl_FADT.XDsdt = AcpiTbSelectAddress ("DSDT",
         AcpiGbl_FADT.Dsdt, AcpiGbl_FADT.XDsdt);
 
     /* If Hardware Reduced flag is set, we are all done */
@@ -555,7 +555,7 @@ AcpiTbConvertFadt (
         Length = *ACPI_ADD_PTR (UINT8,
             &AcpiGbl_FADT, FadtInfoTable[i].Length);
 
-        Name = __UNCONST(FadtInfoTable[i].Name);
+        Name = FadtInfoTable[i].Name;
 
         /*
          * Expand the ACPI 1.0 32-bit addresses to the ACPI 2.0 64-bit "X"
@@ -755,7 +755,7 @@ AcpiTbSetupFadtRegisters (
                 Source64->SpaceId, Pm1RegisterByteWidth,
                 Source64->Address +
                     (FadtPmInfoTable[i].RegisterNum * Pm1RegisterByteWidth),
-                __UNCONST("PmRegisters"));
+                "PmRegisters");
         }
     }
 }

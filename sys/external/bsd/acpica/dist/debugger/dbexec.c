@@ -319,7 +319,6 @@ AcpiDbGetCacheInfo (
  *
  ******************************************************************************/
 
-#ifdef ACPI_DEBUG_OUTPUT
 static UINT32
 AcpiDbGetOutstandingAllocations (
     void)
@@ -336,7 +335,6 @@ AcpiDbGetOutstandingAllocations (
 
     return (Outstanding);
 }
-#endif
 
 
 /*******************************************************************************

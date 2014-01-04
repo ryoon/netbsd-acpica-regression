@@ -93,6 +93,7 @@ union acpi_parse_object;
 #define ACPI_MAX_MUTEX                  7
 #define ACPI_NUM_MUTEX                  ACPI_MAX_MUTEX+1
 
+
 /* Lock structure for reader/writer interfaces */
 
 typedef struct acpi_rw_lock
@@ -812,7 +813,7 @@ typedef struct acpi_address_range
 typedef struct acpi_opcode_info
 {
 #if defined(ACPI_DISASSEMBLER) || defined(ACPI_DEBUG_OUTPUT)
-    const char                      *Name;          /* Opcode name (disassembler/debug only) */
+    char                            *Name;          /* Opcode name (disassembler/debug only) */
 #endif
     UINT32                          ParseArgs;      /* Grammar/Parse time arguments */
     UINT32                          RuntimeArgs;    /* Interpret time arguments */
@@ -1128,7 +1129,7 @@ typedef struct acpi_interface_info
 
 typedef struct acpi_port_info
 {
-    const char              *Name;
+    char                    *Name;
     UINT16                  Start;
     UINT16                  End;
     UINT8                   OsiDependency;

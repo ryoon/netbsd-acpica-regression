@@ -74,7 +74,7 @@
 ACPI_STATUS
 AcpiUtEvaluateObject (
     ACPI_NAMESPACE_NODE     *PrefixNode,
-    const char              *Path,
+    char                    *Path,
     UINT32                  ExpectedReturnBtypes,
     ACPI_OPERAND_OBJECT     **ReturnDesc)
 {
@@ -95,7 +95,7 @@ AcpiUtEvaluateObject (
     }
 
     Info->PrefixNode = PrefixNode;
-    Info->RelativePathname = __UNCONST(Path);
+    Info->RelativePathname = Path;
 
     /* Evaluate the object/method */
 
@@ -221,7 +221,7 @@ Cleanup:
 
 ACPI_STATUS
 AcpiUtEvaluateNumericObject (
-    const char              *ObjectName,
+    char                    *ObjectName,
     ACPI_NAMESPACE_NODE     *DeviceNode,
     UINT64                  *Value)
 {

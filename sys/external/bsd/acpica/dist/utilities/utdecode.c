@@ -153,7 +153,7 @@ const char        *AcpiGbl_RegionTypes[ACPI_NUM_PREDEFINED_REGIONS] =
 };
 
 
-const char *
+char *
 AcpiUtGetRegionName (
     UINT8                   SpaceId)
 {
@@ -203,7 +203,7 @@ static const char        *AcpiGbl_EventTypes[ACPI_NUM_FIXED_EVENTS] =
 };
 
 
-const char *
+char *
 AcpiUtGetEventName (
     UINT32                  EventId)
 {
@@ -291,7 +291,7 @@ AcpiUtGetTypeName (
 }
 
 
-const char *
+char *
 AcpiUtGetObjectTypeName (
     ACPI_OPERAND_OBJECT     *ObjDesc)
 {
@@ -317,7 +317,7 @@ AcpiUtGetObjectTypeName (
  *
  ******************************************************************************/
 
-const char *
+char *
 AcpiUtGetNodeName (
     void                    *Object)
 {
@@ -393,7 +393,7 @@ static const char           *AcpiGbl_DescTypeNames[] =
 };
 
 
-const char *
+char *
 AcpiUtGetDescriptorName (
     void                    *Object)
 {
@@ -487,7 +487,7 @@ AcpiUtGetReferenceName (
 
 /* Names for internal mutex objects, used for debug output */
 
-static const char              *AcpiGbl_MutexNames[ACPI_NUM_MUTEX] =
+static char                 *AcpiGbl_MutexNames[ACPI_NUM_MUTEX] =
 {
     "ACPI_MTX_Interpreter",
     "ACPI_MTX_Namespace",
@@ -499,7 +499,7 @@ static const char              *AcpiGbl_MutexNames[ACPI_NUM_MUTEX] =
     "ACPI_MTX_CommandReady"
 };
 
-const char *
+char *
 AcpiUtGetMutexName (
     UINT32                  MutexId)
 {

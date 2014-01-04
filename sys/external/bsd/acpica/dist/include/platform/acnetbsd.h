@@ -1,7 +1,6 @@
 /******************************************************************************
  *
  * Name: acnetbsd.h - OS specific defines, etc.
- *       $Revision: 1.9 $
  *
  *****************************************************************************/
 
@@ -49,10 +48,6 @@
 
 #include "acgcc.h"
 
-#define ACPI_UINTPTR_T		uintptr_t
-#define ACPI_USE_LOCAL_CACHE
-#define ACPI_CAST_PTHREAD_T(x)    ((ACPI_THREAD_ID) ACPI_TO_INTEGER (x))
-
 #ifdef _LP64
 #define ACPI_MACHINE_WIDTH      64
 #else
@@ -62,50 +57,26 @@
 #define COMPILER_DEPENDENT_INT64  int64_t
 #define COMPILER_DEPENDENT_UINT64 uint64_t
 
-#if defined(_KERNEL) || defined(_STANDALONE)
-#ifdef _KERNEL_OPT
+#ifdef _KERNEL
 #include "opt_acpi.h"           /* collect build-time options here */
-#endif /* _KERNEL_OPT */
 
 #include <sys/param.h>
 #include <sys/systm.h>
-#include <dev/acpi/acpica/acpi_func.h>
+#include <machine/stdarg.h>
+#include <machine/acpi_func.h>
 
 #define asm         __asm
 
 #define ACPI_USE_NATIVE_DIVIDE
-
-#define ACPI_ASM_MACROS         /* tell acenv.h */
 
 #define ACPI_SYSTEM_XFACE
 #define ACPI_EXTERNAL_XFACE
 #define ACPI_INTERNAL_XFACE
 #define ACPI_INTERNAL_VAR_XFACE
 
-/*
- * XXX: The internal memory tracking of ACPICA, available when
- *      ACPI_DBG_TRACK_ALLOCATIONS is defined, has been removed
- *      from ACPI_DEBUG.
- *
- *      This is due to the instability of the ABI of ACPICA.
- *
- *      If the memory tracking is enabled, ACPICA will insert a header
- *      to each memory allocation. As a consequence, when ACPI specific
- *      code is loaded as a kernel module and the running kernel has
- *      been compiled with ACPI_DEBUG, the result is an instant panic.
- *      This happens because of unaligned memory access when the code
- *      tries to use ACPI_FREE for a buffer obtained via ACPI_ALLOCATE,
- *      AcpiEvaluateObject(), and related calls.
- *
- *      If the involved memory statistics are required, a separate constant
- *      ACPI_DEBUG_ALLOC is available in options(4) for ACPI_DEBUG kernels.
- */
-
 #ifdef ACPI_DEBUG
 #define ACPI_DEBUG_OUTPUT
-#ifdef ACPI_DEBUG_ALLOC
 #define ACPI_DBG_TRACK_ALLOCATIONS
-#endif
 #ifdef DEBUGGER_THREADING
 #undef DEBUGGER_THREADING
 #endif /* DEBUGGER_THREADING */
@@ -123,10 +94,9 @@ isprint(int ch)
         return(isspace(ch) || isascii(ch));
 }
 
-#else /* defined(_KERNEL) || defined(_STANDALONE) */
+#else /* _KERNEL */
 
 #include <ctype.h>
-#include <stdint.h>
 
 /* Not building kernel code, so use libc */
 #define ACPI_USE_STANDARD_HEADERS
@@ -137,7 +107,7 @@ isprint(int ch)
 /* XXX */
 #define __inline inline
 
-#endif /* defined(_KERNEL) || defined(_STANDALONE) */
+#endif /* _KERNEL */
 
 /* Always use NetBSD code over our local versions */
 #define ACPI_USE_SYSTEM_CLIBRARY

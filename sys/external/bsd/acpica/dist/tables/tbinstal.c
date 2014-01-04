@@ -299,7 +299,7 @@ AcpiTbTableOverride (
         NewAddress = ACPI_PTR_TO_PHYSADDR (NewTable);
         NewTableLength = NewTable->Length;
         NewFlags = ACPI_TABLE_ORIGIN_OVERRIDE;
-        OverrideType = __UNCONST("Logical");
+        OverrideType = "Logical";
         goto FinishOverride;
     }
 
@@ -321,7 +321,7 @@ AcpiTbTableOverride (
             return (NULL);
         }
 
-        OverrideType = __UNCONST("Physical");
+        OverrideType = "Physical";
         NewFlags = ACPI_TABLE_ORIGIN_MAPPED;
         goto FinishOverride;
     }

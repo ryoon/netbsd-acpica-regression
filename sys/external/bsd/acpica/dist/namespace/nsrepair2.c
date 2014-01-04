@@ -288,7 +288,7 @@ AcpiNsRepair_ALR (
 
 
     Status = AcpiNsCheckSortedList (Info, ReturnObject, 0, 2, 1,
-                ACPI_SORT_ASCENDING, __UNCONST("AmbientIlluminance"));
+                ACPI_SORT_ASCENDING, "AmbientIlluminance");
 
     return (Status);
 }
@@ -548,7 +548,7 @@ RemoveElement:
      * C-state type, in ascending order.
      */
     Status = AcpiNsCheckSortedList (Info, ReturnObject, 1, 4, 1,
-                ACPI_SORT_ASCENDING, __UNCONST("C-State Type"));
+                ACPI_SORT_ASCENDING, "C-State Type");
     if (ACPI_FAILURE (Status))
     {
         return (Status);
@@ -751,7 +751,7 @@ AcpiNsRepair_PSS (
      * should be proportional to the power.
      */
     Status =AcpiNsCheckSortedList (Info, ReturnObject, 0, 6, 0,
-                ACPI_SORT_DESCENDING, __UNCONST("CpuFrequency"));
+                ACPI_SORT_DESCENDING, "CpuFrequency");
     if (ACPI_FAILURE (Status))
     {
         return (Status);
@@ -826,7 +826,7 @@ AcpiNsRepair_TSS (
     }
 
     Status = AcpiNsCheckSortedList (Info, ReturnObject, 0, 5, 1,
-                ACPI_SORT_DESCENDING, __UNCONST("PowerDissipation"));
+                ACPI_SORT_DESCENDING, "PowerDissipation");
 
     return (Status);
 }

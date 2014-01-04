@@ -58,32 +58,32 @@
 
 static void
 AcpiRsOutString (
-    const char              *Title,
-    const char              *Value);
+    char                    *Title,
+    char                    *Value);
 
 static void
 AcpiRsOutInteger8 (
-    const char              *Title,
+    char                    *Title,
     UINT8                   Value);
 
 static void
 AcpiRsOutInteger16 (
-    const char              *Title,
+    char                    *Title,
     UINT16                  Value);
 
 static void
 AcpiRsOutInteger32 (
-    const char              *Title,
+    char                    *Title,
     UINT32                  Value);
 
 static void
 AcpiRsOutInteger64 (
-    const char              *Title,
+    char                    *Title,
     UINT64                  Value);
 
 static void
 AcpiRsOutTitle (
-    const char              *Title);
+    char                    *Title);
 
 static void
 AcpiRsDumpByteList (
@@ -139,7 +139,7 @@ AcpiRsDumpDescriptor (
 {
     UINT8                   *Target = NULL;
     UINT8                   *PreviousTarget;
-    const char              *Name;
+    char                    *Name;
     UINT8                    Count;
 
 
@@ -541,8 +541,8 @@ AcpiRsDumpIrqList (
 
 static void
 AcpiRsOutString (
-    const char              *Title,
-    const char              *Value)
+    char                    *Title,
+    char                    *Value)
 {
     AcpiOsPrintf ("%27s : %s", Title, Value);
     if (!*Value)
@@ -554,7 +554,7 @@ AcpiRsOutString (
 
 static void
 AcpiRsOutInteger8 (
-    const char              *Title,
+    char                    *Title,
     UINT8                   Value)
 {
     AcpiOsPrintf ("%27s : %2.2X\n", Title, Value);
@@ -562,7 +562,7 @@ AcpiRsOutInteger8 (
 
 static void
 AcpiRsOutInteger16 (
-    const char              *Title,
+    char                    *Title,
     UINT16                  Value)
 {
     AcpiOsPrintf ("%27s : %4.4X\n", Title, Value);
@@ -570,7 +570,7 @@ AcpiRsOutInteger16 (
 
 static void
 AcpiRsOutInteger32 (
-    const char              *Title,
+    char                    *Title,
     UINT32                  Value)
 {
     AcpiOsPrintf ("%27s : %8.8X\n", Title, Value);
@@ -578,7 +578,7 @@ AcpiRsOutInteger32 (
 
 static void
 AcpiRsOutInteger64 (
-    const char              *Title,
+    char                    *Title,
     UINT64                  Value)
 {
     AcpiOsPrintf ("%27s : %8.8X%8.8X\n", Title,
@@ -587,7 +587,7 @@ AcpiRsOutInteger64 (
 
 static void
 AcpiRsOutTitle (
-    const char              *Title)
+    char                    *Title)
 {
     AcpiOsPrintf ("%27s : ", Title);
 }

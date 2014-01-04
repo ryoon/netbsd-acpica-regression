@@ -203,6 +203,7 @@ ACPI_FIXED_EVENT_INFO       AcpiGbl_FixedEventInfo[ACPI_NUM_FIXED_EVENTS] =
 };
 #endif /* !ACPI_REDUCED_HARDWARE */
 
+
 /*******************************************************************************
  *
  * FUNCTION:    AcpiUtInitGlobals

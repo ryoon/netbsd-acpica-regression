@@ -72,9 +72,7 @@ void *                      AslLocalAllocate (unsigned int Size);
 #define static
 #undef alloca
 #define alloca              AslLocalAllocate
-#ifndef yytname
 #define yytname             AslCompilername
-#endif
 
 #define YYINITDEPTH         600             /* State stack depth */
 #define YYDEBUG             1               /* Enable debug output */

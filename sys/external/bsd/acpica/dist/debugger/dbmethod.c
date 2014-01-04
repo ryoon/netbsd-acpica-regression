@@ -508,8 +508,7 @@ AcpiDbWalkForExecute (
 
             case ACPI_TYPE_STRING:
 
-                ThisParam->String.Pointer = __UNCONST(
-		    "This is the default argument string");
+                ThisParam->String.Pointer = "This is the default argument string";
                 ThisParam->String.Length = ACPI_STRLEN (ThisParam->String.Pointer);
                 break;
 

@@ -54,8 +54,8 @@
 #ifdef ACPI_DEBUG_OUTPUT
 
 static ACPI_THREAD_ID       AcpiGbl_PrevThreadId = (ACPI_THREAD_ID) 0xFFFFFFFF;
-static const char           *AcpiGbl_FnEntryStr = "----Entry";
-static const char           *AcpiGbl_FnExitStr  = "----Exit-";
+static char                 *AcpiGbl_FnEntryStr = "----Entry";
+static char                 *AcpiGbl_FnExitStr  = "----Exit-";
 
 /* Local prototypes */
 
@@ -395,7 +395,7 @@ AcpiUtTraceStr (
     const char              *FunctionName,
     const char              *ModuleName,
     UINT32                  ComponentId,
-    const char              *String)
+    char                    *String)
 {
 
     AcpiGbl_NestingLevel++;

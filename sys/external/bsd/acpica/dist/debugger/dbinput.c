@@ -68,7 +68,7 @@ AcpiDbSingleThread (
 
 static void
 AcpiDbDisplayCommandInfo (
-    const char              *Command,
+    char                    *Command,
     BOOLEAN                 DisplayAll);
 
 static void
@@ -77,7 +77,7 @@ AcpiDbDisplayHelp (
 
 static BOOLEAN
 AcpiDbMatchCommandHelp (
-    const char                  *Command,
+    char                        *Command,
     const ACPI_DB_COMMAND_HELP  *Help);
 
 
@@ -335,10 +335,10 @@ static const ACPI_DB_COMMAND_HELP   AcpiGbl_DbCommandHelp[] =
 
 static BOOLEAN
 AcpiDbMatchCommandHelp (
-    const char                  *Command,
+    char                        *Command,
     const ACPI_DB_COMMAND_HELP  *Help)
 {
-    const char              *Invocation = Help->Invocation;
+    char                    *Invocation = Help->Invocation;
     UINT32                  LineCount;
 
 
@@ -397,7 +397,7 @@ AcpiDbMatchCommandHelp (
 
 static void
 AcpiDbDisplayCommandInfo (
-    const char              *Command,
+    char                    *Command,
     BOOLEAN                 DisplayAll)
 {
     const ACPI_DB_COMMAND_HELP  *Next;
@@ -985,7 +985,8 @@ AcpiDbCommandDispatch (
         break;
 
     case CMD_METHODS:
-        Status = AcpiDbDisplayObjects (__UNCONST("METHOD"), AcpiGbl_DbArgs[1]);
+
+        Status = AcpiDbDisplayObjects ("METHOD", AcpiGbl_DbArgs[1]);
         break;
 
     case CMD_NAMESPACE:

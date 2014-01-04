@@ -62,12 +62,12 @@
 
 static void
 AcpiExOutString (
-    const char              *Title,
-    const char              *Value);
+    char                    *Title,
+    char                    *Value);
 
 static void
 AcpiExOutPointer (
-    const char              *Title,
+    char                    *Title,
     void                    *Value);
 
 static void
@@ -376,7 +376,7 @@ AcpiExDumpObject (
     while (Count)
     {
         Target = ACPI_ADD_PTR (UINT8, ObjDesc, Info->Offset);
-        Name = __UNCONST(Info->Name);
+        Name = Info->Name;
 
         switch (Info->Opcode)
         {
@@ -818,15 +818,15 @@ AcpiExDumpOperands (
 
 static void
 AcpiExOutString (
-    const char              *Title,
-    const char              *Value)
+    char                    *Title,
+    char                    *Value)
 {
     AcpiOsPrintf ("%20s : %s\n", Title, Value);
 }
 
 static void
 AcpiExOutPointer (
-    const char              *Title,
+    char                    *Title,
     void                    *Value)
 {
     AcpiOsPrintf ("%20s : %p\n", Title, Value);

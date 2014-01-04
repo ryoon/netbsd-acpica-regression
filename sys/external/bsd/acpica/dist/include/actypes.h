@@ -424,7 +424,6 @@ typedef UINT32                          ACPI_PHYSICAL_ADDRESS;
 typedef UINT32                          ACPI_STATUS;    /* All ACPI Exceptions */
 typedef UINT32                          ACPI_NAME;      /* 4-byte ACPI name */
 typedef char *                          ACPI_STRING;    /* Null terminated ASCII string */
-typedef const char *                    ACPI_CONST_STRING;    /* Null terminated ASCII string */
 typedef void *                          ACPI_HANDLE;    /* Actually a ptr to a NS Node */
 
 
@@ -979,9 +978,9 @@ typedef struct acpi_buffer
  */
 typedef struct acpi_predefined_names
 {
-    const char                      *Name;
+    char                            *Name;
     UINT8                           Type;
-    const char                      *Val;
+    char                            *Val;
 
 } ACPI_PREDEFINED_NAMES;
 

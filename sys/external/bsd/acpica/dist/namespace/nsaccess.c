@@ -118,7 +118,7 @@ AcpiNsRootInitialize (
             continue;
         }
 
-        Status = AcpiNsLookup (NULL, __UNCONST(InitVal->Name), InitVal->Type,
+        Status = AcpiNsLookup (NULL, InitVal->Name, InitVal->Type,
                         ACPI_IMODE_LOAD_PASS2, ACPI_NS_NO_UPSEARCH,
                         NULL, &NewNode);
         if (ACPI_FAILURE (Status))
@@ -145,7 +145,7 @@ AcpiNsRootInitialize (
 
             if (!Val)
             {
-                Val = __UNCONST(InitVal->Val);
+                Val = InitVal->Val;
             }
 
             /*
@@ -379,7 +379,7 @@ AcpiNsLookup (
 
         NumSegments = 0;
         ThisNode = AcpiGbl_RootNode;
-        Path = __UNCONST("");
+        Path = "";
 
         ACPI_DEBUG_PRINT ((ACPI_DB_NAMES,
             "Null Pathname (Zero segments), Flags=%X\n", Flags));
