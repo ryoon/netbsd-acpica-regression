@@ -134,7 +134,7 @@ AcpiInitializeSubsystem (
     return_ACPI_STATUS (Status);
 }
 
-ACPI_EXPORT_SYMBOL_INIT (AcpiInitializeSubsystem)
+ACPI_EXPORT_SYMBOL (AcpiInitializeSubsystem)
 
 
 /*******************************************************************************
@@ -256,7 +256,7 @@ AcpiEnableSubsystem (
     return_ACPI_STATUS (Status);
 }
 
-ACPI_EXPORT_SYMBOL_INIT (AcpiEnableSubsystem)
+ACPI_EXPORT_SYMBOL (AcpiEnableSubsystem)
 
 
 /*******************************************************************************
@@ -355,4 +355,4 @@ AcpiInitializeObjects (
     return_ACPI_STATUS (Status);
 }
 
-ACPI_EXPORT_SYMBOL_INIT (AcpiInitializeObjects)
+ACPI_EXPORT_SYMBOL (AcpiInitializeObjects)

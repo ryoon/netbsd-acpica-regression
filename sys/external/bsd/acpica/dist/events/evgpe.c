@@ -549,7 +549,6 @@ AcpiEvAsynchExecuteGpeMethod (
     Status = AcpiUtAcquireMutex (ACPI_MTX_EVENTS);
     if (ACPI_FAILURE (Status))
     {
-        ACPI_FREE (LocalGpeEventInfo);
         return_VOID;
     }
 
@@ -558,7 +557,6 @@ AcpiEvAsynchExecuteGpeMethod (
     if (!AcpiEvValidGpeEvent (GpeEventInfo))
     {
         Status = AcpiUtReleaseMutex (ACPI_MTX_EVENTS);
-        ACPI_FREE (LocalGpeEventInfo);
         return_VOID;
     }
 
@@ -572,7 +570,6 @@ AcpiEvAsynchExecuteGpeMethod (
     Status = AcpiUtReleaseMutex (ACPI_MTX_EVENTS);
     if (ACPI_FAILURE (Status))
     {
-        ACPI_FREE (LocalGpeEventInfo);
         return_VOID;
     }
 

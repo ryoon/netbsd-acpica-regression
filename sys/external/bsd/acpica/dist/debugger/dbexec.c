@@ -62,7 +62,7 @@ AcpiDbExecuteMethod (
     ACPI_DB_METHOD_INFO     *Info,
     ACPI_BUFFER             *ReturnObj);
 
-static ACPI_STATUS
+static void
 AcpiDbExecuteSetup (
     ACPI_DB_METHOD_INFO     *Info);
 
@@ -237,15 +237,10 @@ Cleanup:
  *
  ******************************************************************************/
 
-static ACPI_STATUS
+static void
 AcpiDbExecuteSetup (
     ACPI_DB_METHOD_INFO     *Info)
 {
-    ACPI_STATUS             Status;
-
-
-    ACPI_FUNCTION_NAME (DbExecuteSetup);
-
 
     /* Catenate the current scope to the supplied name */
 
@@ -253,21 +248,10 @@ AcpiDbExecuteSetup (
     if ((Info->Name[0] != '\\') &&
         (Info->Name[0] != '/'))
     {
-        if (AcpiUtSafeStrcat (Info->Pathname, sizeof (Info->Pathname),
-            AcpiGbl_DbScopeBuf))
-        {
-            Status = AE_BUFFER_OVERFLOW;
-            goto ErrorExit;
-        }
+        ACPI_STRCAT (Info->Pathname, AcpiGbl_DbScopeBuf);
     }
 
-    if (AcpiUtSafeStrcat (Info->Pathname, sizeof (Info->Pathname),
-        Info->Name))
-    {
-        Status = AE_BUFFER_OVERFLOW;
-        goto ErrorExit;
-    }
-
+    ACPI_STRCAT (Info->Pathname, Info->Name);
     AcpiDbPrepNamestring (Info->Pathname);
 
     AcpiDbSetOutputDestination (ACPI_DB_DUPLICATE_OUTPUT);
@@ -285,13 +269,6 @@ AcpiDbExecuteSetup (
 
         AcpiDbSetOutputDestination (ACPI_DB_REDIRECTABLE_OUTPUT);
     }
-
-    return (AE_OK);
-
-ErrorExit:
-
-    ACPI_EXCEPTION ((AE_INFO, Status, "During setup for method execution"));
-    return (Status);
 }
 
 
@@ -452,12 +429,7 @@ AcpiDbExecute (
         ReturnObj.Pointer = NULL;
         ReturnObj.Length = ACPI_ALLOCATE_BUFFER;
 
-        Status = AcpiDbExecuteSetup (&AcpiGbl_DbMethodInfo);
-        if (ACPI_FAILURE (Status))
-        {
-            ACPI_FREE (NameString);
-            return;
-        }
+        AcpiDbExecuteSetup (&AcpiGbl_DbMethodInfo);
 
         /* Get the NS node, determines existence also */
 
@@ -757,11 +729,7 @@ AcpiDbCreateExecutionThreads (
 
     AcpiDbUint32ToHexString (NumThreads, AcpiGbl_DbMethodInfo.NumThreadsStr);
 
-    Status = AcpiDbExecuteSetup (&AcpiGbl_DbMethodInfo);
-    if (ACPI_FAILURE (Status))
-    {
-        goto CleanupAndExit;
-    }
+    AcpiDbExecuteSetup (&AcpiGbl_DbMethodInfo);
 
     /* Get the NS node, determines existence also */
 

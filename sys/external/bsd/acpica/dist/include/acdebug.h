@@ -393,10 +393,6 @@ char *
 AcpiDbGetFromHistory (
     char                    *CommandNumArg);
 
-char *
-AcpiDbGetHistoryByIndex (
-    UINT32                  CommanddNum);
-
 
 /*
  * dbinput - user front-end to the AML debugger
