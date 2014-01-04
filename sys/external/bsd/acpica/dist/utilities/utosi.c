@@ -81,7 +81,7 @@ static ACPI_INTERFACE_INFO    AcpiDefaultSupportedInterfaces[] =
 
 	/* Feature Group Strings */
 
-    {"Extended Address Space Descriptor", NULL, 0, 0}
+    {__UNCONST("Extended Address Space Descriptor"), NULL, 0, 0}
 
     /*
      * All "optional" feature group strings (features that are implemented
