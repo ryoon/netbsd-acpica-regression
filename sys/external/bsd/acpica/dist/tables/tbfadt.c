@@ -58,7 +58,7 @@ AcpiTbInitGenericAddress (
     UINT8                   SpaceId,
     UINT8                   ByteWidth,
     UINT64                  Address,
-    char                    *RegisterName);
+    ACPI_CONST_STRING       RegisterName);
 
 static void
 AcpiTbConvertFadt (
@@ -77,7 +77,7 @@ AcpiTbSetupFadtRegisters (
 
 typedef struct acpi_fadt_info
 {
-    const char              *Name;
+    ACPI_CONST_STRING       Name;
     UINT16                  Address64;
     UINT16                  Address32;
     UINT16                  Length;
@@ -209,10 +209,10 @@ AcpiTbInitGenericAddress (
     UINT8                   SpaceId,
     UINT8                   ByteWidth,
     UINT64                  Address,
-    char                    *RegisterName)
+    ACPI_CONST_STRING       RegisterName)
 {
     UINT8                   BitWidth;
-
+    ACPI_STRING             URegisterName = __UNCONST(RegisterName);
 
     /* Bit width field in the GAS is only one byte long, 255 max */
 
@@ -223,7 +223,7 @@ AcpiTbInitGenericAddress (
         ACPI_ERROR ((AE_INFO,
             "%s - 32-bit FADT register is too long (%u bytes, %u bits) "
             "to convert to GAS struct - 255 bits max, truncating",
-            RegisterName, ByteWidth, (ByteWidth * 8)));
+            URegisterName, ByteWidth, (ByteWidth * 8)));
 
         BitWidth = 255;
     }
@@ -533,11 +533,10 @@ static void
 AcpiTbValidateFadt (
     void)
 {
-    char                    *Name;
+    ACPI_STRING             Name;
     ACPI_GENERIC_ADDRESS    *Address64;
     UINT8                   Length;
     UINT32                  i;
-
 
     /*
      * Check for FACS and DSDT address mismatches. An address mismatch between
@@ -585,7 +584,7 @@ AcpiTbValidateFadt (
                         &AcpiGbl_FADT, FadtInfoTable[i].Address64);
         Length = *ACPI_ADD_PTR (UINT8,
                         &AcpiGbl_FADT, FadtInfoTable[i].Length);
-        Name = FadtInfoTable[i].Name;
+        Name = __UNCONST(FadtInfoTable[i].Name);
 
         /*
          * For each extended field, check for length mismatch between the
