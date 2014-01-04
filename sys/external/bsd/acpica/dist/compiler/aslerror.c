@@ -200,16 +200,6 @@ AePrintException (
 
         switch (Enode->Level)
         {
-        case ASL_WARNING:
-        case ASL_WARNING2:
-        case ASL_WARNING3:
-
-            if (!Gbl_DisplayWarnings)
-            {
-                return;
-            }
-            break;
-
         case ASL_REMARK:
 
             if (!Gbl_DisplayRemarks)
@@ -232,9 +222,10 @@ AePrintException (
         }
     }
 
-    /* Get the various required file handles */
+    /* Get the file handles */
 
     OutputFile = Gbl_Files[FileId].Handle;
+
 
     if (!Enode->SourceLine)
     {

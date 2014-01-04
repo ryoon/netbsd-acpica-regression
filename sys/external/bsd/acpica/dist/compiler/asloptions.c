@@ -523,8 +523,6 @@ AslDoOptions (
     case 'p':   /* Override default AML output filename */
 
         Gbl_OutputFilenamePrefix = AcpiGbl_Optarg;
-        UtConvertBackslashes (Gbl_OutputFilenamePrefix);
-
         Gbl_UseDefaultAmlFilename = FALSE;
         break;
 
@@ -608,17 +606,9 @@ AslDoOptions (
 
         case 'a':
 
-            /* Disable all error/warning/remark messages */
+            /* Disable All error/warning messages */
 
             Gbl_NoErrors = TRUE;
-            break;
-
-        case 'e':
-
-            /* Disable all warning/remark messages (errors only) */
-
-            Gbl_DisplayRemarks = FALSE;
-            Gbl_DisplayWarnings = FALSE;
             break;
 
         case 'i':

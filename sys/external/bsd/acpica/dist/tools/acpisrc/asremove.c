@@ -638,9 +638,7 @@ AsCleanupSpecialMacro (
 {
     char                    *SubString;
     char                    *SubBuffer;
-    char                    *CommentEnd;
-    int                     NewLine;
-    int                     NestLevel;
+    char                    *LastNonSpace;
 
 
     SubBuffer = Buffer;
@@ -652,84 +650,40 @@ AsCleanupSpecialMacro (
 
         if (SubString)
         {
-            /* Find start of the macro parameters */
-
-            while (*SubString != '(')
-            {
-                SubString++;
-            }
-            SubString++;
-
-            NestLevel = 1;
-            while (*SubString)
-            {
-                if (*SubString == '(')
-                {
-                    NestLevel++;
-                }
-                else if (*SubString == ')')
-                {
-                    NestLevel--;
-                }
-
-                SubString++;
-
-                if (NestLevel == 0)
-                {
-                    break;
-                }
-            }
-
-SkipLine:
-
-            /* Find end of the line */
-
-            NewLine = FALSE;
-            while (!NewLine && *SubString)
-            {
-                if (*SubString == '\n' && *(SubString - 1) != '\\')
-                {
-                    NewLine = TRUE;
-                }
-                SubString++;
-            }
-
-            /* Find end of the line */
-
-            if (*SubString == '#' || *SubString == '\n')
-            {
-                goto SkipLine;
-            }
+            /* Find start of the line */
 
             SubBuffer = SubString;
-
-            /* Find start of the non-space */
-
-            while (*SubString == ' ')
+            while (*(SubBuffer - 1) == ' ')
             {
-                SubString++;
+                SubBuffer--;
             }
 
-            /* Find end of the line */
-
-            if (*SubString == '#' || *SubString == '\n')
+            if (*(SubBuffer - 1) == '\n')
             {
-                goto SkipLine;
-            }
+                /* Find last non-space character */
 
-            /* Find end of the line */
-
-            if (*SubString == '/' || *SubString == '*')
-            {
-                CommentEnd = strstr (SubString, "*/");
-                if (CommentEnd)
+                LastNonSpace = SubBuffer - 1;
+                while (isspace ((int) *LastNonSpace))
                 {
-                    SubString = CommentEnd + 2;
-                    goto SkipLine;
+                    LastNonSpace--;
+                }
+
+                if (*LastNonSpace != '\\')
+                {
+                    /* Remove the extra spaces */
+
+                    SubString = AsRemoveData (SubBuffer, SubString);
+
+                    /* Enforce an empty line between the invocations */
+
+                    if (*(SubBuffer - 2) == ')')
+                    {
+                        AsInsertData (SubBuffer, "\n", 1);
+                    }
                 }
             }
 
-            SubString = AsRemoveData (SubBuffer, SubString);
+            SubBuffer = SubString + strlen (Keyword);
         }
     }
 }

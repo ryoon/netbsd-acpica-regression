@@ -316,7 +316,7 @@ XfNamespaceLocateBegin (
      */
     if (Op->Asl.CompileFlags & NODE_IS_NAME_DECLARATION)
     {
-        return_ACPI_STATUS (AE_OK);
+        return (AE_OK);
     }
 
     /* We are only interested in opcodes that have an associated name */
@@ -329,7 +329,7 @@ XfNamespaceLocateBegin (
         (Op->Asl.ParseOpcode != PARSEOP_NAMESEG)    &&
         (Op->Asl.ParseOpcode != PARSEOP_METHODCALL))
     {
-        return_ACPI_STATUS (AE_OK);
+        return (AE_OK);
     }
 
     /*
@@ -340,7 +340,7 @@ XfNamespaceLocateBegin (
     if ((Op->Asl.Parent) &&
         (Op->Asl.Parent->Asl.ParseOpcode == PARSEOP_CONDREFOF))
     {
-        return_ACPI_STATUS (AE_OK);
+        return (AE_OK);
     }
 
     /*
@@ -459,8 +459,7 @@ XfNamespaceLocateBegin (
 
             Status = AE_OK;
         }
-
-        return_ACPI_STATUS (Status);
+        return (Status);
     }
 
     /* Check for a reference vs. name declaration */
@@ -625,6 +624,7 @@ XfNamespaceLocateBegin (
 
                 (Op->Asl.ParseOpcode == PARSEOP_METHODCALL))
     {
+
         /*
          * A reference to a method within one of these opcodes is not an
          * invocation of the method, it is simply a reference to the method.
@@ -634,7 +634,7 @@ XfNamespaceLocateBegin (
             (Op->Asl.Parent->Asl.ParseOpcode == PARSEOP_DEREFOF)    ||
             (Op->Asl.Parent->Asl.ParseOpcode == PARSEOP_OBJECTTYPE)))
         {
-            return_ACPI_STATUS (AE_OK);
+            return (AE_OK);
         }
         /*
          * There are two types of method invocation:
@@ -650,7 +650,7 @@ XfNamespaceLocateBegin (
                     Op->Asl.ExternalName, AcpiUtGetTypeName (Node->Type));
 
             AslError (ASL_ERROR, ASL_MSG_NOT_METHOD, Op, MsgBuffer);
-            return_ACPI_STATUS (AE_OK);
+            return (AE_OK);
         }
 
         /* Save the method node in the caller's op */
@@ -658,7 +658,7 @@ XfNamespaceLocateBegin (
         Op->Asl.Node = Node;
         if (Op->Asl.Parent->Asl.ParseOpcode == PARSEOP_CONDREFOF)
         {
-            return_ACPI_STATUS (AE_OK);
+            return (AE_OK);
         }
 
         /*
@@ -823,7 +823,7 @@ XfNamespaceLocateBegin (
     }
 
     Op->Asl.Node = Node;
-    return_ACPI_STATUS (Status);
+    return (Status);
 }
 
 
@@ -858,7 +858,7 @@ XfNamespaceLocateEnd (
     OpInfo = AcpiPsGetOpcodeInfo (Op->Asl.AmlOpcode);
     if (!(OpInfo->Flags & AML_NAMED))
     {
-        return_ACPI_STATUS (AE_OK);
+        return (AE_OK);
     }
 
     /* Not interested in name references, we did not open a scope for them */
@@ -867,7 +867,7 @@ XfNamespaceLocateEnd (
         (Op->Asl.ParseOpcode == PARSEOP_NAMESEG)    ||
         (Op->Asl.ParseOpcode == PARSEOP_METHODCALL))
     {
-        return_ACPI_STATUS (AE_OK);
+        return (AE_OK);
     }
 
     /* Pop the scope stack if necessary */
@@ -882,5 +882,5 @@ XfNamespaceLocateEnd (
         (void) AcpiDsScopeStackPop (WalkState);
     }
 
-    return_ACPI_STATUS (AE_OK);
+    return (AE_OK);
 }

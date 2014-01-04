@@ -440,7 +440,8 @@ typedef struct acpi_table_pcct
 {
     ACPI_TABLE_HEADER       Header;             /* Common ACPI table header */
     UINT32                  Flags;
-    UINT64                  Reserved;
+    UINT32                  Latency;
+    UINT32                  Reserved;
 
 } ACPI_TABLE_PCCT;
 
@@ -448,16 +449,8 @@ typedef struct acpi_table_pcct
 
 #define ACPI_PCCT_DOORBELL              1
 
-/* Values for subtable type in ACPI_SUBTABLE_HEADER */
-
-enum AcpiPcctType
-{
-    ACPI_PCCT_TYPE_GENERIC_SUBSPACE     = 0,
-    ACPI_PCCT_TYPE_RESERVED             = 1     /* 1 and greater are reserved */
-};
-
 /*
- * PCCT Subtables, correspond to Type in ACPI_SUBTABLE_HEADER
+ * PCCT subtables
  */
 
 /* 0: Generic Communications Subspace */
@@ -471,9 +464,6 @@ typedef struct acpi_pcct_subspace
     ACPI_GENERIC_ADDRESS    DoorbellRegister;
     UINT64                  PreserveMask;
     UINT64                  WriteMask;
-    UINT32                  Latency;
-    UINT32                  MaxAccessRate;
-    UINT16                  MinTurnaroundTime;
 
 } ACPI_PCCT_SUBSPACE;
 

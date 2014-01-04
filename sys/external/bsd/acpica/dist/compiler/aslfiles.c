@@ -824,7 +824,6 @@ FlParseInputPathname (
         *(Substring+1) = 0;
     }
 
-    UtConvertBackslashes (Gbl_OutputFilenamePrefix);
     return (AE_OK);
 }
 #endif
