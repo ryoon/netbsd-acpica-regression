@@ -1,0 +1,9 @@
+This tree is created for bisect of ACPICA in NetBSD src tree.
+
+https://github.com/acpica/acpica/commit/637accd073a205eb4acac935f34d0eaee0c301a8
+This commit disables USB sockets of my MacBook Air mid 2012
+with NetBSD/amd64 6.99.28 (that is shipped with ACPICA 20131218).
+
+Reverting the commit enables USB sockets of my machine.
+
+CAUTION: This tree contains non-unix2 source code of ACPICA.
